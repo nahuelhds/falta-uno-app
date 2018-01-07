@@ -28,6 +28,8 @@ export default {
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
+  white: '#fff',
+  whiteTransparent: 'rgba(0,0,0,0.2)',
   ... theme,
   ... social,
 };
