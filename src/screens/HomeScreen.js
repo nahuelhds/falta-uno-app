@@ -11,7 +11,24 @@ export default class SearchScreen extends React.Component {
   });
 
   state = {
-    search: ""
+    search: "",
+    currentPosition: {}
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({ 
+          currentPosition : {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          },
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
   }
 
   render() {
@@ -25,6 +42,8 @@ export default class SearchScreen extends React.Component {
           onChangeText={(search) => {this.setState({ search })}}
           placeholder={Lang.t('search.placeholder')}/>
         <ScrollView>
+          <Text>Latitude: {this.state.currentPosition.latitude}</Text>
+          <Text>Longitude: {this.state.currentPosition.longitude}</Text>
         </ScrollView>
       </View>
     );

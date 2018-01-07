@@ -13,7 +13,7 @@ export default {
     success: `¡Proceso completado con éxito!`,
   },
   search: {
-    title: `Buscar`,
+    title: `Inicio`,
     placeholder: `Escribí para filtrar...`
   },
   myMatches: {

@@ -6,7 +6,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 import Colors from 'constants/Colors';
 
 import AvailabilityScreen from 'screens/AvailabilityScreen';
-import SearchScreen from 'screens/SearchScreen';
+import HomeScreen from 'screens/HomeScreen';
 import MyMatchesScreen from 'screens/MyMatchesScreen';
 
 export default TabNavigator(
@@ -14,8 +14,8 @@ export default TabNavigator(
     Availability: {
       screen: AvailabilityScreen,
     },
-    Search: {
-      screen: SearchScreen,
+    Home: {
+      screen: HomeScreen,
     },
     MyMatches: {
       screen: MyMatchesScreen,
@@ -31,11 +31,11 @@ export default TabNavigator(
             iconName =
               Platform.OS === 'ios' ? `ios-hand${focused ? '' : '-outline'}` : 'md-hand';
             break;
-          case 'Search':
+          case 'Home':
             iconName =
               Platform.OS === 'ios'
-                ? `ios-search${focused ? '' : '-outline'}`
-                : 'md-search';
+                ? `ios-home${focused ? '' : '-outline'}`
+                : 'md-home';
             break;
           case 'MyMatches':
             iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';

@@ -13,12 +13,16 @@ export default {
     success: `Process succeed!`,
   },
   search: {
-    title: `Search`
+    title: `Home`,
+    placeholder: "Write to filter..."
   },
   myMatches: {
     title: `My matches`
   },
   availability: {
-    title: `Volunteer`
+    title: `Volunteer`,
+    available: `Show me available to play`,
+    filterByDistance: `Filter matches by distance`,
+    distance: `Until {{distance}} km. arround`
   }
 }
