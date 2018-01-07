@@ -5,7 +5,7 @@ import { SearchBar, Header } from 'react-native-elements';
 import Colors from 'constants/Colors';
 
 export default class SearchScreen extends React.Component {
-  // Definimos de forma dinamica (funcion) para que el lenguaje este bien calculado (sino recae en ingles)
+  // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('search.title'),
   });
@@ -19,8 +19,8 @@ export default class SearchScreen extends React.Component {
       <View style={styles.container}>
         <SearchBar 
           clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
-          containerStyle={{ width: '100%', backgroundColor: Colors.light }} 
-          inputStyle={{backgroundColor: Colors.tabBar}}
+          containerStyle={styles.searchBar} 
+          inputStyle={styles.input}
           lightTheme
           onChangeText={(search) => {this.setState({ search })}}
           placeholder={Lang.t('search.placeholder')}/>
@@ -35,5 +35,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20
+  },
+  searchBar: { 
+    backgroundColor: Colors.light,
+    width: '100%', 
+  },
+  input:{
+    backgroundColor: Colors.tabBar
   }
 })
