@@ -23,6 +23,14 @@ export default {
     title: `Disponibilidad`,
     available: `Estoy disponible para jugar`,
     filterByDistance: `Filtrar partidos por distancia`,
-    distance: `Hasta {{distance}} km. a la redonda`
-  }
+    distance: `Hasta {{distance}} km. a la redonda`,
+    myLocation: `Mi ubicación`
+  },
+  location: {
+    error: {
+      androidEmulator: `Ups, esto no va a funcionar en Sketch en el emulador de Android. ¡Prueba en tu dispositivo!`,
+      permissionDenied: `Permiso denegado`
+    }
+  },
+  loading: `Cargando...`
 }

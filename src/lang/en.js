@@ -20,5 +20,12 @@ export default {
   },
   availability: {
     title: `Volunteer`
-  }
+  },
+  location: {
+    error: {
+      androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
+      permissionDenied: `Permission to access location was denied`
+    }
+  },
+  loading: `Loading...`
 }
