@@ -22,6 +22,7 @@ export default TabNavigator(
     },
   },
   {
+    initialRouteName: 'Search',
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
