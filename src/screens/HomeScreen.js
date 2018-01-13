@@ -3,32 +3,31 @@ import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import Lang from 'lang';
 import { SearchBar, Header } from 'react-native-elements';
 import Colors from 'constants/Colors';
+import * as Firebase from 'firebase';
 
 export default class SearchScreen extends React.Component {
-  // Definimos de forma dinamica (funcion) para que el lenguaje este bien calculado (sino recae en ingles)
+
+  constructor(props){
+    super(props);
+    this.usersTable = Firebase.database().ref()
+      .child(`users`)
+      .orderByChild(`available`)
+      .equalTo(true);
+  }
+
+  // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('search.title'),
   });
 
   state = {
     search: "",
-    currentPosition: {}
+    currentPosition: {},
+    users: {}
   }
 
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({ 
-          currentPosition : {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          },
-          error: null,
-        });
-      },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+  componentWillMount() {
+    this.getNearPlayers();
   }
 
   render() {
@@ -36,17 +35,23 @@ export default class SearchScreen extends React.Component {
       <View style={styles.container}>
         <SearchBar 
           clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
-          containerStyle={{ width: '100%', backgroundColor: Colors.light }} 
-          inputStyle={{backgroundColor: Colors.tabBar}}
+          containerStyle={styles.searchBar} 
+          inputStyle={styles.input}
           lightTheme
           onChangeText={(search) => {this.setState({ search })}}
           placeholder={Lang.t('search.placeholder')}/>
         <ScrollView>
-          <Text>Latitude: {this.state.currentPosition.latitude}</Text>
-          <Text>Longitude: {this.state.currentPosition.longitude}</Text>
+
         </ScrollView>
       </View>
     );
+  }
+
+  getNearPlayers() {
+    this.usersTable.on("value", (snapshot) => {
+      console.log(snapshot.val())
+        this.setState({ users: snapshot.val() })
+    })
   }
 }
 
@@ -54,5 +59,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20
+  },
+  searchBar: { 
+    backgroundColor: Colors.light,
+    width: '100%', 
+  },
+  input:{
+    backgroundColor: Colors.tabBar
   }
+
 })

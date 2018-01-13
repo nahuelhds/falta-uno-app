@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Lang from 'lang'
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Platform, Text } from 'react-native';
 import { List, ListItem, Slider } from 'react-native-elements';
+import { Constants, Location, Permissions } from 'expo';
+
 import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
-
 
 export default class AvailabilityScreen extends React.Component {
   static navigationOptions = () => ({
@@ -18,13 +19,25 @@ export default class AvailabilityScreen extends React.Component {
       available: true,
       filterByDistance: true,
       distance: 15,
-    }
+      location: null
+    },
+    locationErrorMessage: null,
   }
 
   constructor(props) {
     super(props);
     const uid = Firebase.auth().currentUser.uid;
     this.userRef = Firebase.database().ref(`users/${uid}`)
+  }
+
+  componentWillMount() {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      this.setState({
+        locationErrorMessage: Lang.t('location.error.androidEmulator'),
+      });
+    } else {
+      this._getLocationAsync();
+    }
   }
 
   componentDidMount() {
@@ -35,11 +48,6 @@ export default class AvailabilityScreen extends React.Component {
         this.setState({ loading: false, user: newUserState })
       }
     })
-  }
-
-  _updateUser(userState) {
-    const newUserState = Object.assign({}, this.state.user, userState)
-    this.userRef.set(newUserState)
   }
 
   render() {
@@ -57,6 +65,12 @@ export default class AvailabilityScreen extends React.Component {
           switchButton
           switched={this.state.user.available}
           onSwitch={() => this._updateUser({ available: !this.state.user.available })}
+        />
+        <ListItem
+          hideChevron
+          title={Lang.t('availability.myLocation')}
+          rightTitle={this._getLocationText()}
+          rightTitleStyle={styles.locationText}
         />
         <ListItem
           title={Lang.t('availability.filterByDistance')}
@@ -84,6 +98,42 @@ export default class AvailabilityScreen extends React.Component {
       </List>
     </View>
   }
+
+  _updateUser(userState) {
+    const newUserState = Object.assign({}, this.state.user, userState)
+    this.userRef.set(newUserState)
+  }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: Lang.t('location.error.permissionDenied'),
+      });
+    }
+
+    let position = await Location.getCurrentPositionAsync({});
+    let locationCheck = await Location.reverseGeocodeAsync(position.coords);
+    let location = locationCheck[0]
+
+    this._updateUser({ position, location });
+  }
+
+  _getLocationText() {
+    if (this.state.locationErrorMessage) {
+      return this.state.locationErrorMessage;
+    } else if (this.state.user.location) {
+      const location = this.state.user.location
+      return `${location.city}, ${location.country}`
+    } else if (this.state.user.position) {
+      const latlng = this.state.user.position.coords;
+      const lat = latlng.latitude;
+      const lng = latlng.longitude;
+      return `${lat}, ${lng}`
+    }
+
+    return Lang.t('loading')
+  }
 }
 
 const styles = StyleSheet.create({
@@ -95,5 +145,8 @@ const styles = StyleSheet.create({
     color: Colors.muted,
     fontSize: 14,
     alignSelf: 'center'
+  },
+  locationText: {
+    color: Colors.muted
   }
 })

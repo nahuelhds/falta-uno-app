@@ -24,5 +24,12 @@ export default {
     available: `Show me available to play`,
     filterByDistance: `Filter matches by distance`,
     distance: `Until {{distance}} km. arround`
-  }
+  },
+  location: {
+    error: {
+      androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
+      permissionDenied: `Permission to access location was denied`
+    }
+  },
+  loading: `Loading...`
 }

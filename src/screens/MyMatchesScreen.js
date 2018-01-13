@@ -5,6 +5,7 @@ import Lang from 'lang'
 
 
 export default class MyMatchesScreen extends React.Component {
+  // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('myMatches.title'),
   });
