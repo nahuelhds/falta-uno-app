@@ -1,8 +1,9 @@
 import React from 'react';
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
-import Lang from 'lang';
+import { ActivityIndicator ,ScrollView, Text, View, StyleSheet } from 'react-native';
 import { SearchBar, Header } from 'react-native-elements';
+import PlayerCard from '../components/PlayerCard';
 import Colors from 'constants/Colors';
+import Lang from 'lang';
 import * as Firebase from 'firebase';
 
 export default class SearchScreen extends React.Component {
@@ -13,6 +14,13 @@ export default class SearchScreen extends React.Component {
       .child(`users`)
       .orderByChild(`available`)
       .equalTo(true);
+
+      this.state = {
+        loading: true,
+        search: "",
+        currentPosition: {},
+        players: []
+      }
   }
 
   // Dynamic definition so we can get the actual Lang locale
@@ -20,42 +28,52 @@ export default class SearchScreen extends React.Component {
     title: Lang.t('search.title'),
   });
 
-  state = {
-    search: "",
-    currentPosition: {},
-    users: {}
+  componentDidMount() {
+    this._getNearPlayers();
   }
 
-  componentWillMount() {
-    this.getNearPlayers();
+  _getNearPlayers() {
+    players = []
+    this.usersTable.on("value", (snapshot) => {
+      snapshot.forEach(player => {
+        players.push(player)
+      });  
+      this.setState({ loading: false, players: players });
+    })
+
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <SearchBar 
-          clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
-          containerStyle={styles.searchBar} 
-          inputStyle={styles.input}
-          lightTheme
-          onChangeText={(search) => {this.setState({ search })}}
-          placeholder={Lang.t('search.placeholder')}/>
-        <ScrollView>
+    const players = this.state.players.map((p) => <PlayerCard player={p} ></PlayerCard>);
 
-        </ScrollView>
+    if (this.state.loading) {
+      return <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
       </View>
-    );
-  }
-
-  getNearPlayers() {
-    this.usersTable.on("value", (snapshot) => {
-      console.log(snapshot.val())
-        this.setState({ users: snapshot.val() })
-    })
+    } else {
+      return (
+        <View style={styles.container}>
+          <SearchBar 
+            clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
+            containerStyle={styles.searchBar} 
+            inputStyle={styles.input}
+            lightTheme
+            onChangeText={(search) => {this.setState({ search })}}
+            placeholder={Lang.t('search.placeholder')}/>
+          <ScrollView>
+              { players }
+          </ScrollView>
+        </View>
+      );  
+    }
   }
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     paddingTop: 20

@@ -53,7 +53,8 @@ export default class LoginScreen extends React.Component {
 
   login = async () => {
     this.setState({ isLogging: true });
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId);
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId, 
+      { permissions: ['public_profile', 'user_birthday']});
     if (type === 'success') {
 
       this.setState({
@@ -61,6 +62,12 @@ export default class LoginScreen extends React.Component {
         toastState: 'primary',
         toastMsg: Lang.t('login.success')
       });
+
+      const userData = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+
+      Firebase.database.ref(`users`).child().set({
+        personalData: await(userData.json()) 
+      })
 
       // Build Firebase credential with the Facebook access token.
       const credential = Firebase.auth.FacebookAuthProvider.credential(token);
