@@ -44,7 +44,7 @@ export default class SearchScreen extends React.Component {
   }
 
   render() {
-    const players = this.state.players.map((p) => <PlayerCard player={p} ></PlayerCard>);
+    const players = this.state.players.map((player) => <PlayerCard player={player} key={player.key} ></PlayerCard>);
 
     if (this.state.loading) {
       return <View style={styles.loadingContainer}>
