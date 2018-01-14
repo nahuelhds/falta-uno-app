@@ -3,6 +3,17 @@ export default {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
   },
+  availability: {
+    title: `Volunteer`,
+    available: `Show me available to play`,
+    filterByDistance: `Filter matches by distance`,
+    distance: `Until {{distance}} km. arround`
+  },
+  home: {
+    title: `Home`,
+    placeholder: `Write to filter...`,
+    noPlayers: `There are no available players at this time`,
+  },
   login: {
     loginWithFacebook: `Login with Facebook`,
     logging: `Logging in...`,
@@ -12,25 +23,17 @@ export default {
     },
     success: `Process succeed!`,
   },
-  home: {
-    title: `Home`,
-    placeholder: `Write to filter...`,
-    noPlayers: `There are no available players at this time`,
-  },
-  myMatches: {
-    title: `My matches`
-  },
-  availability: {
-    title: `Volunteer`,
-    available: `Show me available to play`,
-    filterByDistance: `Filter matches by distance`,
-    distance: `Until {{distance}} km. arround`
-  },
+  loading: `Loading...`,
   location: {
     error: {
       androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
       permissionDenied: `Permission to access location was denied`
     }
   },
-  loading: `Loading...`
+  myMatches: {
+    title: `My matches`
+  },
+  myProfile: {
+    title: `Profile`,
+  },
 }

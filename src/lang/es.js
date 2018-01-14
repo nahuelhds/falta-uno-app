@@ -3,6 +3,18 @@ export default {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
   },
+  availability: {
+    title: `Disponibilidad`,
+    available: `Estoy disponible para jugar`,
+    filterByDistance: `Filtrar partidos por distancia`,
+    distance: `Hasta {{distance}} km. a la redonda`,
+    myLocation: `Mi ubicación`
+  },
+  home: {
+    title: `Inicio`,
+    placeholder: `Escribí para filtrar...`,
+    noPlayers: `No hay jugadores disponibles por ahora`,
+  },
   login: {
     loginWithFacebook: `Ingresar con Facebook`,
     logging: `Ingresando...`,
@@ -12,26 +24,17 @@ export default {
     },
     success: `¡Proceso completado con éxito!`,
   },
-  home: {
-    title: `Inicio`,
-    placeholder: `Escribí para filtrar...`,
-    noPlayers: `No hay jugadores disponibles por ahora`,
-  },
-  myMatches: {
-    title: `Mis partidos`
-  },
-  availability: {
-    title: `Disponibilidad`,
-    available: `Estoy disponible para jugar`,
-    filterByDistance: `Filtrar partidos por distancia`,
-    distance: `Hasta {{distance}} km. a la redonda`,
-    myLocation: `Mi ubicación`
-  },
+  loading: `Cargando...`,
   location: {
     error: {
       androidEmulator: `Ups, esto no va a funcionar en Sketch en el emulador de Android. ¡Prueba en tu dispositivo!`,
       permissionDenied: `Permiso denegado`
     }
   },
-  loading: `Cargando...`
+  myMatches: {
+    title: `Mis partidos`
+  },
+  myProfile: {
+    title: `Perfil`,
+  },
 }
