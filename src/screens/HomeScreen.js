@@ -10,17 +10,16 @@ export default class SearchScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.usersTable = Firebase.database().ref()
-      .child(`users`)
+    this.usersRef = Firebase.database().ref(`users`)
       .orderByChild(`available`)
       .equalTo(true);
 
-      this.state = {
-        loading: true,
-        search: "",
-        currentPosition: {},
-        players: []
-      }
+    this.state = {
+      loading: true,
+      search: "",
+      currentPosition: {},
+      players: {}
+    }
   }
 
   // Dynamic definition so we can get the actual Lang locale
@@ -28,29 +27,24 @@ export default class SearchScreen extends React.Component {
     title: Lang.t('search.title'),
   });
 
-  componentDidMount() {
+  componentWillMount() {
     this._getNearPlayers();
   }
 
   _getNearPlayers() {
-    players = []
-    this.usersTable.on("value", (snapshot) => {
-      snapshot.forEach(player => {
-        players.push(player)
-      });  
-      this.setState({ loading: false, players: players });
+    this.usersRef.on("value", (snapshot) => {
+      this.setState({ loading: false, players: snapshot.val() });
     })
-
   }
 
   render() {
-    const players = this.state.players.map((player) => <PlayerCard player={player} key={player.key} ></PlayerCard>);
 
     if (this.state.loading) {
       return <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
       </View>
     } else {
+      const players = this.state.players
       return (
         <View style={styles.container}>
           <SearchBar 
@@ -61,7 +55,7 @@ export default class SearchScreen extends React.Component {
             onChangeText={(search) => {this.setState({ search })}}
             placeholder={Lang.t('search.placeholder')}/>
           <ScrollView>
-              { players }
+            {Object.keys(players).map((key) => <PlayerCard player={players[key]} key={key} />)}
           </ScrollView>
         </View>
       );  
