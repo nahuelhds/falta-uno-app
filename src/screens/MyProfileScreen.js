@@ -8,9 +8,9 @@ import { Location, Permissions } from 'expo';
 import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
 
-export default class AvailabilityScreen extends React.Component {
+export default class MyProfileScreen extends React.Component {
   static navigationOptions = () => ({
-    title: Lang.t('availability.title'),
+    title: Lang.t('myProfile.title'),
   });
 
   state = {
@@ -68,7 +68,7 @@ export default class AvailabilityScreen extends React.Component {
         </View>
         <List>
           <ListItem
-            title={Lang.t('availability.available')}
+            title={Lang.t('myProfile.available')}
             hideChevron
             switchButton
             switched={this.state.user.available}
@@ -76,12 +76,12 @@ export default class AvailabilityScreen extends React.Component {
           />
           <ListItem
             hideChevron
-            title={Lang.t('availability.myLocation')}
+            title={Lang.t('myProfile.myLocation')}
             rightTitle={this._getLocationText()}
             rightTitleStyle={styles.locationText}
           />
           <ListItem
-            title={Lang.t('availability.filterByDistance')}
+            title={Lang.t('myProfile.filterByDistance')}
             hideChevron
             switchButton
             switched={this.state.user.filterByDistance}
@@ -90,7 +90,7 @@ export default class AvailabilityScreen extends React.Component {
           <ListItem
             disabled={!this.state.user.filterByDistance}
             hideChevron
-            subtitle={Lang.t('availability.distance', { distance: user.distance })}
+            subtitle={Lang.t('myProfile.distance', { distance: user.distance })}
             subtitleStyle={styles.sliderLabel}
             title={<Slider
               disabled={!this.state.user.filterByDistance}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    margin: 20,
+    marginTop: 20,
     alignItems: 'center',
   },
   sliderLabel: {

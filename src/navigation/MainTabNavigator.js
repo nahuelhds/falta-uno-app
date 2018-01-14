@@ -5,7 +5,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MyProfileScreen from 'screens/AvailabilityScreen';
+import MyProfileScreen from 'screens/MyProfileScreen';
 import HomeScreen from 'screens/HomeScreen';
 
 const navigationResolver = ({ navigation }) => ({

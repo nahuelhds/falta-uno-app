@@ -3,13 +3,6 @@ export default {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
   },
-  availability: {
-    title: `Perfil`,
-    available: `Estoy disponible para jugar`,
-    filterByDistance: `Filtrar partidos por distancia`,
-    distance: `Hasta {{distance}} km. a la redonda`,
-    myLocation: `Mi ubicación`
-  },
   home: {
     title: `Inicio`,
     placeholder: `Escribí para filtrar...`,
@@ -33,5 +26,12 @@ export default {
   },
   myMatches: {
     title: `Mis partidos`
+  },
+  myProfile: {
+    title: `Perfil`,
+    available: `Estoy disponible para jugar`,
+    filterByDistance: `Filtrar partidos por distancia`,
+    distance: `Hasta {{distance}} km. a la redonda`,
+    myLocation: `Mi ubicación`
   },
 }
