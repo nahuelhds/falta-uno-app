@@ -12,9 +12,10 @@ export default {
     },
     success: `¡Proceso completado con éxito!`,
   },
-  search: {
+  home: {
     title: `Inicio`,
-    placeholder: `Escribí para filtrar...`
+    placeholder: `Escribí para filtrar...`,
+    noPlayers: `No hay jugadores disponibles por ahora`,
   },
   myMatches: {
     title: `Mis partidos`

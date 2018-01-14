@@ -12,9 +12,10 @@ export default {
     },
     success: `Process succeed!`,
   },
-  search: {
+  home: {
     title: `Home`,
-    placeholder: "Write to filter..."
+    placeholder: `Write to filter...`,
+    noPlayers: `There are no available players at this time`,
   },
   myMatches: {
     title: `My matches`
