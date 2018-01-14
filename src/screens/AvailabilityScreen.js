@@ -34,8 +34,15 @@ export default class AvailabilityScreen extends React.Component {
   async componentWillMount() {
     await this._loadUserAsync();
     await this._getLocationAsync();
+    this._listenUserRef();
     this._updateUser(this.state.user);
     this.setState({ loading: false });
+  }
+
+  _listenUserRef(){
+    this.userRef.on('value', (snapshot) => {
+      this.setState({ user: snapshot.val() })
+    })
   }
 
   render() {
