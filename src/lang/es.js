@@ -4,7 +4,7 @@ export default {
     slogan: `La app que no te deja tirado`,
   },
   availability: {
-    title: `Disponibilidad`,
+    title: `Perfil`,
     available: `Estoy disponible para jugar`,
     filterByDistance: `Filtrar partidos por distancia`,
     distance: `Hasta {{distance}} km. a la redonda`,
@@ -33,8 +33,5 @@ export default {
   },
   myMatches: {
     title: `Mis partidos`
-  },
-  myProfile: {
-    title: `Perfil`,
   },
 }

@@ -5,9 +5,8 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import AvailabilityScreen from 'screens/AvailabilityScreen';
+import MyProfileScreen from 'screens/AvailabilityScreen';
 import HomeScreen from 'screens/HomeScreen';
-import MyProfileScreen from 'screens/MyProfileScreen';
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
@@ -17,9 +16,9 @@ const iconResolver = (navigation, focused) => {
   const { routeName } = navigation.state;
   let iconName;
   switch (routeName) {
-    case 'Availability':
+    case 'MyProfile':
       iconName =
-        Platform.OS === 'ios' ? `ios-hand${focused ? '' : '-outline'}` : 'md-hand';
+        Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
       break;
     case 'Home':
       iconName =
@@ -30,9 +29,6 @@ const iconResolver = (navigation, focused) => {
     // case 'MyMatches':
     //   iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
     //   break;
-    case 'MyProfile':
-      iconName = Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
-      break;
   }
   return (
     <Ionicons
@@ -46,9 +42,6 @@ const iconResolver = (navigation, focused) => {
 
 export default TabNavigator(
   {
-    Availability: {
-      screen: AvailabilityScreen,
-    },
     Home: {
       screen: HomeScreen,
     },

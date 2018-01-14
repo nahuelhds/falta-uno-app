@@ -4,7 +4,7 @@ export default {
     slogan: `La app que no te deja tirado`,
   },
   availability: {
-    title: `Volunteer`,
+    title: `Profile`,
     available: `Show me available to play`,
     filterByDistance: `Filter matches by distance`,
     distance: `Until {{distance}} km. arround`
@@ -32,8 +32,5 @@ export default {
   },
   myMatches: {
     title: `My matches`
-  },
-  myProfile: {
-    title: `Profile`,
   },
 }

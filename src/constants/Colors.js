@@ -9,7 +9,7 @@ const theme = {
   light: '#f4f4f4',
   dark: '#222',
   warning: '#ffd700', //gold
-  muted: '#999999'
+  muted: '#888888'
 }
 
 const social = {

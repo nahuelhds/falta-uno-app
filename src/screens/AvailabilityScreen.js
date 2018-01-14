@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Lang from 'lang'
-import { ActivityIndicator, StyleSheet, View, Platform, Text } from 'react-native';
-import { List, ListItem, Slider } from 'react-native-elements';
-import { Constants, Location, Permissions } from 'expo';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { List, ListItem, Slider, Avatar, Text } from 'react-native-elements';
+import { Location, Permissions } from 'expo';
 
 import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
@@ -39,7 +39,7 @@ export default class AvailabilityScreen extends React.Component {
     this.setState({ loading: false });
   }
 
-  _listenUserRef(){
+  _listenUserRef() {
     this.userRef.on('value', (snapshot) => {
       this.setState({ user: snapshot.val() })
     })
@@ -52,46 +52,60 @@ export default class AvailabilityScreen extends React.Component {
       </View>
     }
 
-    return <View>
-      <List>
-        <ListItem
-          title={Lang.t('availability.available')}
-          hideChevron
-          switchButton
-          switched={this.state.user.available}
-          onSwitch={() => this._updateUser({ available: !this.state.user.available })}
-        />
-        <ListItem
-          hideChevron
-          title={Lang.t('availability.myLocation')}
-          rightTitle={this._getLocationText()}
-          rightTitleStyle={styles.locationText}
-        />
-        <ListItem
-          title={Lang.t('availability.filterByDistance')}
-          hideChevron
-          switchButton
-          switched={this.state.user.filterByDistance}
-          onSwitch={() => this._updateUser({ filterByDistance: !this.state.user.filterByDistance })}
-        />
-        <ListItem
-          disabled={!this.state.user.filterByDistance}
-          hideChevron
-          subtitle={Lang.t('availability.distance', { distance: this.state.user.distance })}
-          subtitleStyle={styles.sliderLabel}
-          title={<Slider
+    const user = this.state.user
+
+    return (
+      <View>
+        <View style={styles.container}>
+          <Avatar
+            large
+            rounded
+            source={{ uri: user.photoURL }}
+            containerStyle={styles.avatar}
+          />
+          <Text h4>{user.displayName}</Text>
+          <Text style={styles.textMuted}>{user.email}</Text>
+        </View>
+        <List>
+          <ListItem
+            title={Lang.t('availability.available')}
+            hideChevron
+            switchButton
+            switched={this.state.user.available}
+            onSwitch={() => this._updateUser({ available: !user.available })}
+          />
+          <ListItem
+            hideChevron
+            title={Lang.t('availability.myLocation')}
+            rightTitle={this._getLocationText()}
+            rightTitleStyle={styles.locationText}
+          />
+          <ListItem
+            title={Lang.t('availability.filterByDistance')}
+            hideChevron
+            switchButton
+            switched={this.state.user.filterByDistance}
+            onSwitch={() => this._updateUser({ filterByDistance: !user.filterByDistance })}
+          />
+          <ListItem
             disabled={!this.state.user.filterByDistance}
-            minimumTrackTintColor={Colors.primaryLight}
-            minimumValue={1}
-            maximumValue={30}
-            onValueChange={(distance) => this._updateUser({ distance })}
-            step={1}
-            thumbTintColor={Colors.primary}
-            value={this.state.user.distance}
-          />}
-        />
-      </List>
-    </View>
+            hideChevron
+            subtitle={Lang.t('availability.distance', { distance: user.distance })}
+            subtitleStyle={styles.sliderLabel}
+            title={<Slider
+              disabled={!this.state.user.filterByDistance}
+              minimumTrackTintColor={Colors.primaryLight}
+              minimumValue={1}
+              maximumValue={30}
+              onValueChange={(distance) => this._updateUser({ distance })}
+              step={1}
+              thumbTintColor={Colors.primary}
+              value={this.state.user.distance}
+            />}
+          />
+        </List>
+      </View>
+    )
   }
 
   _updateUser(userState) {
@@ -150,6 +164,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  container: {
+    margin: 20,
+    alignItems: 'center',
+  },
   sliderLabel: {
     color: Colors.muted,
     fontSize: 14,
@@ -157,5 +175,8 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: Colors.muted
+  },
+  textMuted:{
+    color: Colors.muted,
   }
 })
