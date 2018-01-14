@@ -30,7 +30,7 @@ export default class LoginScreen extends React.Component {
       disabled: this.state.isLogging
     }
 
-    if(this.state.isLogging){
+    if (this.state.isLogging) {
       buttonProps.title = Lang.t('login.logging');
     }
 
@@ -53,8 +53,8 @@ export default class LoginScreen extends React.Component {
 
   login = async () => {
     this.setState({ isLogging: true });
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId, 
-      { permissions: ['public_profile', 'user_birthday']});
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId,
+      { permissions: ['user_birthday'] });
     if (type === 'success') {
 
       this.setState({
@@ -63,23 +63,20 @@ export default class LoginScreen extends React.Component {
         toastMsg: Lang.t('login.success')
       });
 
-      const userData = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-
-      Firebase.database.ref(`users`).child().set({
-        personalData: await(userData.json()) 
-      })
-
       // Build Firebase credential with the Facebook access token.
       const credential = Firebase.auth.FacebookAuthProvider.credential(token);
+
       // Sign in with credential from the Facebook user.
-      Firebase.auth().signInWithCredential(credential).catch(() => {
-        this.setState({
-          isLogging: false,
-          toast: true,
-          toastState: 'danger',
-          toastMsg: Lang.t('login.error.auth')
+      Firebase.auth().signInWithCredential(credential)
+        .then(this._getUserData)
+        .catch(() => {
+          this.setState({
+            isLogging: false,
+            toast: true,
+            toastState: 'danger',
+            toastMsg: Lang.t('login.error.auth')
+          });
         });
-      });
     } else if (type === 'cancel') {
       this.setState({
         isLogging: false,
@@ -89,20 +86,24 @@ export default class LoginScreen extends React.Component {
       });
     }
   }
+
+  _getUserData(user) {
+    return Firebase.database().ref(`users/${user.uid}`).set(user.providerData[0])
+  }
 }
 
 const styles = StyleSheet.create({
   flexible: {
     flex: 1
   },
-  title:{
+  title: {
     marginTop: 20
   },
   imageContainer: {
-    flex: 4, 
-    alignItems: 'center', 
+    flex: 4,
+    alignItems: 'center',
   },
-  end:{
+  end: {
     justifyContent: 'flex-end'
   },
   toast: {
