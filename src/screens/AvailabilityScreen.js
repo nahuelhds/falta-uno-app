@@ -19,7 +19,8 @@ export default class AvailabilityScreen extends React.Component {
       available: true,
       filterByDistance: true,
       distance: 15,
-      location: null
+      location: {},
+      position: {},
     },
     locationErrorMessage: null,
   }
@@ -105,18 +106,25 @@ export default class AvailabilityScreen extends React.Component {
   }
 
   _getLocationAsync = async () => {
+    // Check for permission
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    // If not granted, show the message
     if (status !== 'granted') {
       this.setState({
         errorMessage: Lang.t('location.error.permissionDenied'),
       });
     }
 
+    // Get the position and the reversegeolocation
     let position = await Location.getCurrentPositionAsync({});
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
-    this._updateUser({ position, location });
+    // We don't send this directly to Firebase as we need to sync with the ref
+    // to finish getting the current user data from the cloud
+    const localUserState = Object.assign({}, this.state.user, { position, location })
+    // So we prepare the info so be merged instead
+    this.setState({ user: localUserState });
   }
 
   _getLocationText() {
