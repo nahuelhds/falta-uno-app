@@ -31,24 +31,11 @@ export default class AvailabilityScreen extends React.Component {
     this.userRef = Firebase.database().ref(`users/${uid}`)
   }
 
-  componentWillMount() {
-    if (Platform.OS === 'android' && !Constants.isDevice) {
-      this.setState({
-        locationErrorMessage: Lang.t('location.error.androidEmulator'),
-      });
-    } else {
-      this._getLocationAsync();
-    }
-  }
-
-  componentDidMount() {
-    this.userRef.on('value', (snapshot) => {
-      const userState = snapshot.val();
-      if (userState) {
-        const newUserState = Object.assign({}, this.state.user, userState)
-        this.setState({ loading: false, user: newUserState })
-      }
-    })
+  async componentWillMount() {
+    await this._loadUserAsync();
+    await this._getLocationAsync();
+    this._updateUser(this.state.user);
+    this.setState({ loading: false });
   }
 
   render() {
@@ -105,7 +92,14 @@ export default class AvailabilityScreen extends React.Component {
     this.userRef.set(newUserState)
   }
 
-  _getLocationAsync = async () => {
+  async _loadUserAsync() {
+    // Get this data just one time
+    await this.userRef.once('value', (snapshot) => {
+      this.setState({ user: snapshot.val() })
+    })
+  }
+
+  async _getLocationAsync() {
     // Check for permission
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     // If not granted, show the message
@@ -122,9 +116,9 @@ export default class AvailabilityScreen extends React.Component {
 
     // We don't send this directly to Firebase as we need to sync with the ref
     // to finish getting the current user data from the cloud
-    const localUserState = Object.assign({}, this.state.user, { position, location })
+    const newUserState = Object.assign({}, this.state.user, { position, location })
     // So we prepare the info so be merged instead
-    this.setState({ user: localUserState });
+    this.setState({ user: newUserState });
   }
 
   _getLocationText() {
