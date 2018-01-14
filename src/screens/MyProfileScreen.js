@@ -1,9 +1,10 @@
 import React from 'react';
 import { ExpoConfigView } from '@expo/samples';
+import Lang from 'lang';
 
-export default class SettingsScreen extends React.Component {
+export default class MyProfileScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'app.json',
+    title: Lang.t('myProfile.title'),
   });
 
   render() {
