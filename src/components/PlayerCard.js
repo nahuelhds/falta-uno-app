@@ -6,13 +6,13 @@ export default class PlayerCard extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props.player)
     }
 
     render() {
+        const player = this.props.player
         return (
             <Card>
-                <Text> Hola </Text>
+                <Text> Hola {player.photoURL}</Text>
             </Card>
         )
     }
