@@ -34,8 +34,8 @@ export default class MyProfileScreen extends React.Component {
   async componentWillMount() {
     await this._loadUserAsync();
     await this._getLocationAsync();
-    this._listenUserRef();
     this._updateUser(this.state.user);
+    this._listenUserRef();
     this.setState({ loading: false });
   }
 
