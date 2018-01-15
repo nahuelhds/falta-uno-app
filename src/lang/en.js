@@ -31,6 +31,8 @@ export default {
     title: `Profile`,
     available: `Show me available to play`,
     filterByDistance: `Filter matches by distance`,
-    distance: `Until {{distance}} km. arround`
+    distance: `Until {{distance}} km. arround`,
+    logout: `Log out`,
+    logoutSuccess: `Logout successful`
   },
 }

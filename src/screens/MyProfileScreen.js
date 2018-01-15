@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Lang from 'lang'
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { List, ListItem, Slider, Avatar, Text } from 'react-native-elements';
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
+import { Avatar, List, ListItem, Slider, Text } from 'react-native-elements';
 import { Location, Permissions } from 'expo';
 
+import Lang from 'lang'
 import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
 
@@ -104,6 +104,15 @@ export default class MyProfileScreen extends React.Component {
             />}
           />
         </List>
+        <List containerStyle={styles.logoutContainer}>
+          <ListItem
+            title={Lang.t(`myProfile.logout`)}
+            hideChevron
+            titleStyle={styles.logout}
+            containerStyle={styles.logoutWrapper}
+            onPress={this._logOut}
+          />
+        </List>
       </View>
     )
   }
@@ -113,10 +122,15 @@ export default class MyProfileScreen extends React.Component {
     this.userRef.set(newUserState)
   }
 
+  _logOut() {
+    Firebase.auth().signOut().then(() => Alert.alert(Lang.t(`myProfile.logoutSuccess`)))
+  }
+
   async _loadUserAsync() {
     // Get this data just one time
     await this.userRef.once('value', (snapshot) => {
-      this.setState({ user: snapshot.val() })
+      const newUserState = Object.assign({}, this.state.user, snapshot.val())
+      this.setState({ user: newUserState })
     })
   }
 
@@ -176,7 +190,18 @@ const styles = StyleSheet.create({
   locationText: {
     color: Colors.muted
   },
-  textMuted:{
+  textMuted: {
     color: Colors.muted,
-  }
+  },
+  logoutContainer: {
+    borderTopColor: Colors.danger,
+    marginTop: 40,
+  },
+  logoutWrapper: {
+    borderBottomColor: Colors.danger,
+  },
+  logout: {
+    color: Colors.danger,
+    textAlign: 'center',
+  },
 })

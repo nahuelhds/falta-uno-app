@@ -32,6 +32,8 @@ export default {
     available: `Estoy disponible para jugar`,
     filterByDistance: `Filtrar partidos por distancia`,
     distance: `Hasta {{distance}} km. a la redonda`,
-    myLocation: `Mi ubicación`
+    myLocation: `Mi ubicación`,
+    logout: `Cerrar sesión`,
+    logoutSuccess: `Tu sesión se ha cerrado con éxito,`
   },
 }
