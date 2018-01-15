@@ -88,7 +88,17 @@ export default class LoginScreen extends React.Component {
   }
 
   _getUserData(user) {
-    return Firebase.database().ref(`users/${user.uid}`).set(user.providerData[0])
+    const userRef = Firebase.database().ref(`users/${user.uid}`)
+    return userRef.once('value', function(snapshot) {
+      const exists = (snapshot.val() !== null);
+      let newUserState = user.providerData[0]
+      // If the user exists already
+      if(exists){
+        // Merge the incoming data with the existent one
+        newUserState = Object.assign({}, snapshot.val(), newUserState)
+      }
+      userRef.set(newUserState)
+    });
   }
 }
 

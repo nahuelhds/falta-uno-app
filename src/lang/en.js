@@ -3,12 +3,6 @@ export default {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
   },
-  availability: {
-    title: `Volunteer`,
-    available: `Show me available to play`,
-    filterByDistance: `Filter matches by distance`,
-    distance: `Until {{distance}} km. arround`
-  },
   home: {
     title: `Home`,
     placeholder: `Write to filter...`,
@@ -35,5 +29,10 @@ export default {
   },
   myProfile: {
     title: `Profile`,
+    available: `Show me available to play`,
+    filterByDistance: `Filter matches by distance`,
+    distance: `Until {{distance}} km. arround`,
+    logout: `Log out`,
+    logoutSuccess: `Logout successful`
   },
 }
