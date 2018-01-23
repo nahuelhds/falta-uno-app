@@ -16,9 +16,9 @@ export default class MyProfileScreen extends React.Component {
   state = {
     loading: true,
     user: {
+      phone: null,
       available: true,
       filterByDistance: true,
-      phone: null,
       distance: 15,
       location: {},
       position: {},
@@ -33,16 +33,28 @@ export default class MyProfileScreen extends React.Component {
   }
 
   async componentWillMount() {
-    await this._loadUserAsync();
-    await this._getLocationAsync();
-    this._updateUser(this.state.user);
     this._listenUserRef();
+
+    // Get the online user and merge it
+    const onlineUser = await this._loadUserAsync();
+    const user = Object.assign({}, this.state.user, onlineUser);
+    this.userRef.child('available').set(user.available);
+    this.userRef.child('filterByDistance').set(user.filterByDistance);
+    this.userRef.child('distance').set(user.distance);
+
+    // Get the location and position of the device and upate it online
+    const { position, location } = await this._getLocationAsync();
+    this.userRef.child('position').set(position);
+    this.userRef.child('location').set(location);
+
+    // We finished the load process
     this.setState({ loading: false });
   }
 
   _listenUserRef() {
     this.userRef.on('value', (snapshot) => {
-      this.setState({ user: snapshot.val() })
+      const user = Object.assign({}, this.state.user, snapshot.val())
+      this.setState({ user })
     })
   }
 
@@ -129,11 +141,8 @@ export default class MyProfileScreen extends React.Component {
   }
 
   async _loadUserAsync() {
-    // Get this data just one time
-    await this.userRef.once('value', (snapshot) => {
-      const newUserState = Object.assign({}, this.state.user, snapshot.val())
-      this.setState({ user: newUserState })
-    })
+    // Get this data just one time and return the data (not the promise)
+    return await this.userRef.once('value').then((snapshot) => snapshot.val())
   }
 
   async _getLocationAsync() {
@@ -144,6 +153,7 @@ export default class MyProfileScreen extends React.Component {
       this.setState({
         errorMessage: Lang.t('location.error.permissionDenied'),
       });
+      return;
     }
 
     // Get the position and the reversegeolocation
@@ -151,11 +161,7 @@ export default class MyProfileScreen extends React.Component {
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
-    // We don't send this directly to Firebase as we need to sync with the ref
-    // to finish getting the current user data from the cloud
-    const newUserState = Object.assign({}, this.state.user, { position, location })
-    // So we prepare the info so be merged instead
-    this.setState({ user: newUserState });
+    return { position, location }
   }
 
   _getLocationText() {
