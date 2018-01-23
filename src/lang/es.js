@@ -36,4 +36,9 @@ export default {
     logout: `Cerrar sesión`,
     logoutSuccess: `Tu sesión se ha cerrado con éxito,`
   },
+  invite: {
+    defaultText: "Hola, falta uno para jugar. Te interesa?",
+    invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",
+    invalidPhoneNumberTitle: "Número inválido. "
+  }
 }

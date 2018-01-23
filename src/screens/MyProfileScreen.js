@@ -18,6 +18,7 @@ export default class MyProfileScreen extends React.Component {
     user: {
       available: true,
       filterByDistance: true,
+      phone: null,
       distance: 15,
       location: {},
       position: {},
@@ -65,6 +66,7 @@ export default class MyProfileScreen extends React.Component {
           />
           <Text h4>{user.displayName}</Text>
           <Text style={styles.textMuted}>{user.email}</Text>
+          <Text style={styles.textMuted}>{user.phone}</Text>
         </View>
         <List>
           <ListItem

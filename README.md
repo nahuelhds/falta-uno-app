@@ -1,5 +1,16 @@
 # falta-uno-app
 
+## Getting started
+1. Clone the project
+2. Run `npm install` (Recommended version of node `9.3.0`)
+3. 
+
+## Must have tools
+1. React Native Tools
+2. `react-native-cli`
+3. https://github.com/expo/xde
+4. [Expo] (http://expo.io/)
+
 ## Guía de desarrollo VSCode
 
 ### Configuración para debugging
