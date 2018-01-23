@@ -1,6 +1,7 @@
 node_modules/**/*
 .expo/**/*
 .vscode/.react
+.vscode/.react/debuggerWorker.js
 
 src/config/development.js
 src/config/staging.js
