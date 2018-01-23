@@ -18,7 +18,6 @@ export default class MyProfileScreen extends React.Component {
     user: {
       available: true,
       filterByDistance: true,
-      phone: null,
       distance: 15,
       location: {},
       position: {},
@@ -33,10 +32,10 @@ export default class MyProfileScreen extends React.Component {
   }
 
   async componentWillMount() {
-    await this._loadUserAsync();
-    await this._getLocationAsync();
-    this._updateUser(this.state.user);
     this._listenUserRef();
+    const  { position, location } = await this._getLocationAsync();
+    this.userRef.child('position').set(position);
+    this.userRef.child('location').set(location);
     this.setState({ loading: false });
   }
 
@@ -66,7 +65,6 @@ export default class MyProfileScreen extends React.Component {
           />
           <Text h4>{user.displayName}</Text>
           <Text style={styles.textMuted}>{user.email}</Text>
-          <Text style={styles.textMuted}>{user.phone}</Text>
         </View>
         <List>
           <ListItem
@@ -144,6 +142,7 @@ export default class MyProfileScreen extends React.Component {
       this.setState({
         errorMessage: Lang.t('location.error.permissionDenied'),
       });
+      return;
     }
 
     // Get the position and the reversegeolocation
@@ -151,11 +150,7 @@ export default class MyProfileScreen extends React.Component {
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
-    // We don't send this directly to Firebase as we need to sync with the ref
-    // to finish getting the current user data from the cloud
-    const newUserState = Object.assign({}, this.state.user, { position, location })
-    // So we prepare the info so be merged instead
-    this.setState({ user: newUserState });
+    return { position, location }
   }
 
   _getLocationText() {
