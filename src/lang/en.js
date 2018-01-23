@@ -28,11 +28,12 @@ export default {
     title: `My matches`
   },
   myProfile: {
-    title: `Profile`,
     available: `Show me available to play`,
-    filterByDistance: `Filter matches by distance`,
     distance: `Until {{distance}} km. arround`,
+    filterByDistance: `Filter matches by distance`,
     logout: `Log out`,
-    logoutSuccess: `Logout successful`
+    logoutSuccess: `Logout successful`,
+    phoneNumber: `Phone number`,
+    title: `Profile`,
   },
 }
