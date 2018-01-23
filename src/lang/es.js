@@ -21,7 +21,7 @@ export default {
   location: {
     error: {
       androidEmulator: `Ups, esto no va a funcionar en Sketch en el emulador de Android. ¡Prueba en tu dispositivo!`,
-      permissionDenied: `Permiso denegado`
+      permissionDenied: `Permisos denegados`
     }
   },
   myMatches: {
@@ -30,11 +30,31 @@ export default {
   myProfile: {
     title: `Perfil`,
     available: `Estoy disponible para jugar`,
-    filterByDistance: `Filtrar partidos por distancia`,
     distance: `Hasta {{distance}} km. a la redonda`,
-    myLocation: `Mi ubicación`,
+    filterByDistance: `Filtrar partidos por distancia`,
     logout: `Cerrar sesión`,
-    logoutSuccess: `Tu sesión se ha cerrado con éxito,`
+    logoutSuccess: `Tu sesión se ha cerrado con éxito`,
+    myLocation: `Mi ubicación`,
+    phoneCountryLabel: `País`,
+    phoneNumber: `Teléfono`,
+    phoneNumberEmptyPlacholder: `Seleccione país`,
+    invalidPhoneNumber: `El número telefónico ingresado no coincide con ningún formato válido para tu país`
+  },
+  country: {
+    list: {
+      AR: `Argentina`,
+      UY: `Uruguay`,
+    },
+    phoneData: {
+      AR: {
+        code: `+54 9`,
+        placeholder: `11 2345-6789`,
+      },
+      UY: {
+        code: `+598`,
+        placeholder: '99 123 456',
+      },
+    }
   },
   invite: {
     defaultText: "Hola, falta uno para jugar. Te interesa?",

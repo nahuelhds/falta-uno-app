@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, Picker, StyleSheet, View, ScrollView } from 'react-native';
 import { Avatar, List, ListItem, Slider, Text } from 'react-native-elements';
 import { Location, Permissions } from 'expo';
+import { parse, format, isValidNumber } from 'libphonenumber-js'
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
@@ -13,13 +14,22 @@ export default class MyProfileScreen extends React.Component {
     title: Lang.t('myProfile.title'),
   });
 
+  // Avaiable countries. ISO code format
+  countries = ['AR', 'UY']
+
   state = {
     loading: true,
     user: {
-      phone: null,
+      phone: {
+        // False means autodetect from location
+        country: false,
+        // It must be empty strings to work
+        phone: ""
+      },
       available: true,
       filterByDistance: true,
       distance: 15,
+      locationPermission: false,
       location: {},
       position: {},
     },
@@ -43,9 +53,17 @@ export default class MyProfileScreen extends React.Component {
     this.userRef.child('distance').set(user.distance);
 
     // Get the location and position of the device and upate it online
-    const { position, location } = await this._getLocationAsync();
+    const { locationPermission, position, location } = await this._getLocationAsync();
+    this.userRef.child('locationPermission').set(locationPermission);
     this.userRef.child('position').set(position);
     this.userRef.child('location').set(location);
+
+    if (locationPermission && user.phone.country === false) {
+      this.userRef.child('phone').set({
+        country: location.isoCountryCode,
+        phone: '',
+      })
+    }
 
     // We finished the load process
     this.setState({ loading: false });
@@ -67,8 +85,21 @@ export default class MyProfileScreen extends React.Component {
 
     const user = this.state.user
 
+    let phoneNumberTitle = Lang.t(`myProfile.phoneNumber`);
+    let phoneNumberPlacholder = Lang.t(`myProfile.phoneNumberEmptyPlacholder`);
+    if (user.phone.country) {
+      const countryPhoneCode = Lang.t(`country.phoneData.${user.phone.country}.code`)
+      phoneNumberTitle += ` (${countryPhoneCode})`;
+      phoneNumberPlacholder = Lang.t(`country.phoneData.${user.phone.country}.placeholder`)
+    }
+
+    let phoneNumberLabel = null
+    if (user.phone) {
+      phoneNumberLabel = format(user.phone, 'International')
+    }
+
     return (
-      <View>
+      <ScrollView>
         <View style={styles.container}>
           <Avatar
             large
@@ -78,14 +109,57 @@ export default class MyProfileScreen extends React.Component {
           />
           <Text h4>{user.displayName}</Text>
           <Text style={styles.textMuted}>{user.email}</Text>
-          <Text style={styles.textMuted}>{user.phone}</Text>
+          <Text style={styles.textMuted}>{phoneNumberLabel}</Text>
         </View>
+        <List>
+          <ListItem
+            hideChevron
+            title={<Picker
+              selectedValue={user.phone.country}
+              onValueChange={(phoneCountry) => {
+                if (phoneCountry != this.state.user.phone.country) {
+                  const newPhone = Object.assign({}, this.state.user.phone, { country: phoneCountry ? phoneCountry : '', phone: '' })
+                  this._updateUser({ phone: newPhone })
+                }
+              }}
+              style={styles.picker}>
+              <Picker.Item label={Lang.t(`myProfile.phoneCountryLabel`)} value={null} />
+              {this.countries.map((item) => <Picker.Item label={Lang.t(`country.list.${item}`)} value={item} key={item} />)}
+            </Picker>}
+          />
+          <ListItem
+            title={phoneNumberTitle}
+            hideChevron
+            keyboardType={`phone-pad`}
+            textInput
+            textInputEditable={!user.phone.country ? false : true}
+            textInputPlaceholder={phoneNumberPlacholder}
+            textInputValue={format(user.phone, 'National')}
+            textInputOnChangeText={(phoneNumber) => {
+              if (isValidNumber(phoneNumber, this.state.user.phone.country)) {
+                return this._updateUser({
+                  phone: parse(phoneNumber, this.state.user.phone.country)
+                })
+              }
+              const phone = Object.assign({}, this.state.user.phone, { phone: phoneNumber })
+              const user = Object.assign({}, this.state.user, { phone })
+              this.setState({ user })
+
+              if (!phoneNumber) {
+                this._updateUser({ phone })
+              }
+            }}
+            textInputOnBlur={(event) => {
+              this._validatePhoneNumber(event.nativeEvent.text)
+            }}
+          />
+        </List>
         <List>
           <ListItem
             title={Lang.t('myProfile.available')}
             hideChevron
             switchButton
-            switched={this.state.user.available}
+            switched={user.available}
             onSwitch={() => this._updateUser({ available: !user.available })}
           />
           <ListItem
@@ -96,25 +170,26 @@ export default class MyProfileScreen extends React.Component {
           />
           <ListItem
             title={Lang.t('myProfile.filterByDistance')}
+            disabled={!user.locationPermission}
             hideChevron
             switchButton
-            switched={this.state.user.filterByDistance}
+            switched={user.filterByDistance}
             onSwitch={() => this._updateUser({ filterByDistance: !user.filterByDistance })}
           />
           <ListItem
-            disabled={!this.state.user.filterByDistance}
+            disabled={!user.locationPermission || !user.filterByDistance}
             hideChevron
             subtitle={Lang.t('myProfile.distance', { distance: user.distance })}
             subtitleStyle={styles.sliderLabel}
             title={<Slider
-              disabled={!this.state.user.filterByDistance}
+              disabled={!user.locationPermission || !user.filterByDistance}
               minimumTrackTintColor={Colors.primaryLight}
               minimumValue={1}
               maximumValue={30}
               onValueChange={(distance) => this._updateUser({ distance })}
               step={1}
               thumbTintColor={Colors.primary}
-              value={this.state.user.distance}
+              value={user.distance}
             />}
           />
         </List>
@@ -127,8 +202,29 @@ export default class MyProfileScreen extends React.Component {
             onPress={this._logOut}
           />
         </List>
-      </View>
+      </ScrollView>
     )
+  }
+
+  _validatePhoneNumber(phoneNumber){
+    if (! isValidNumber(phoneNumber, this.state.user.phone.country)) {
+      Alert.alert(Lang.t(`myProfile.invalidPhoneNumber`));
+      const phone = Object.assign({}, this.state.user.phone, { phone: '' })
+      const user = Object.assign({}, this.state.user, { phone })
+      this.setState({ user })
+    }
+  }
+
+  _formatPhoneNumber(phoneNumber, phoneNumberFormat = 'National') {
+    if (isValidNumber(phoneNumber, this.state.user.phone.country)) {
+      const parsedPhoneNumber = parse(phoneNumber, this.state.user.phoneCountry);
+      return format(parsedPhoneNumber, phoneNumberFormat)
+    }
+    return phoneNumber
+  }
+
+  _phoneNumberInternationalFormat(phoneNumber) {
+    return this._formatPhoneNumber(phoneNumber, 'International');
   }
 
   _updateUser(userState) {
@@ -150,10 +246,7 @@ export default class MyProfileScreen extends React.Component {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     // If not granted, show the message
     if (status !== 'granted') {
-      this.setState({
-        errorMessage: Lang.t('location.error.permissionDenied'),
-      });
-      return;
+      return { locationPermission: false, position: {}, location: {} };
     }
 
     // Get the position and the reversegeolocation
@@ -161,12 +254,12 @@ export default class MyProfileScreen extends React.Component {
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
-    return { position, location }
+    return { locationPermission: true, position, location }
   }
 
   _getLocationText() {
-    if (this.state.locationErrorMessage) {
-      return this.state.locationErrorMessage;
+    if (! this.state.user.locationPermission) {
+      return Lang.t(`location.error.permissionDenied`);
     } else if (this.state.user.location) {
       const location = this.state.user.location
       return `${location.city}, ${location.country}`
@@ -200,6 +293,10 @@ const styles = StyleSheet.create({
   },
   textMuted: {
     color: Colors.muted,
+  },
+  picker: {
+    padding: 0,
+    margin: 0,
   },
   logoutContainer: {
     borderTopColor: Colors.danger,
