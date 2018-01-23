@@ -3,6 +3,8 @@ import { Linking, Alert } from 'react-native';
 import { Button } from 'react-native-elements'
 import Lang from 'lang'
 
+import { format } from 'libphonenumber-js'
+
 export default class PlayerCard extends React.Component {
 
     constructor(props) {
@@ -12,7 +14,8 @@ export default class PlayerCard extends React.Component {
     sendNotification() {
         
         const player = this.props.player
-        let phone = player.phone
+        // See: https://www.npmjs.com/package/libphonenumber-js#formatparsednumber-format-options
+        let phone = format(player.phone, 'E.164')
         console.log("Phone is " + phone);
 
         if(phone){
