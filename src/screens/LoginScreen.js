@@ -30,7 +30,7 @@ export default class LoginScreen extends React.Component {
       disabled: this.state.isLogging
     }
 
-    if(this.state.isLogging){
+    if (this.state.isLogging) {
       buttonProps.title = Lang.t('login.logging');
     }
 
@@ -53,7 +53,8 @@ export default class LoginScreen extends React.Component {
 
   login = async () => {
     this.setState({ isLogging: true });
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId);
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId,
+      { permissions: ['user_birthday'] });
     if (type === 'success') {
 
       this.setState({
@@ -64,15 +65,18 @@ export default class LoginScreen extends React.Component {
 
       // Build Firebase credential with the Facebook access token.
       const credential = Firebase.auth.FacebookAuthProvider.credential(token);
+
       // Sign in with credential from the Facebook user.
-      Firebase.auth().signInWithCredential(credential).catch(() => {
-        this.setState({
-          isLogging: false,
-          toast: true,
-          toastState: 'danger',
-          toastMsg: Lang.t('login.error.auth')
+      Firebase.auth().signInWithCredential(credential)
+        .then(this._getUserData)
+        .catch(() => {
+          this.setState({
+            isLogging: false,
+            toast: true,
+            toastState: 'danger',
+            toastMsg: Lang.t('login.error.auth')
+          });
         });
-      });
     } else if (type === 'cancel') {
       this.setState({
         isLogging: false,
@@ -82,20 +86,34 @@ export default class LoginScreen extends React.Component {
       });
     }
   }
+
+  _getUserData(user) {
+    const userRef = Firebase.database().ref(`users/${user.uid}`)
+    return userRef.once('value', function(snapshot) {
+      const exists = (snapshot.val() !== null);
+      let newUserState = user.providerData[0]
+      // If the user exists already
+      if(exists){
+        // Merge the incoming data with the existent one
+        newUserState = Object.assign({}, snapshot.val(), newUserState)
+      }
+      userRef.set(newUserState)
+    });
+  }
 }
 
 const styles = StyleSheet.create({
   flexible: {
     flex: 1
   },
-  title:{
+  title: {
     marginTop: 20
   },
   imageContainer: {
-    flex: 4, 
-    alignItems: 'center', 
+    flex: 4,
+    alignItems: 'center',
   },
-  end:{
+  end: {
     justifyContent: 'flex-end'
   },
   toast: {

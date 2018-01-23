@@ -4,6 +4,7 @@ import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import * as Firebase from 'firebase';
 
+import Colors from 'constants/Colors';
 import Config from 'config'
 import I18n from 'lang'
 
@@ -31,12 +32,12 @@ export default class App extends React.Component {
   };
 
   componentWillMount(){
-    // Inicializo Firebase
+    // Start firebase connection
     Firebase.initializeApp(Config.firebase);
   }
 
   render() {
-    // Cargando
+    // While the assets are loading/caching...
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -46,6 +47,7 @@ export default class App extends React.Component {
         />
       );
     } 
+    // Once all it's loaded...
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
@@ -86,9 +88,10 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    // Listen for authentication state to change.
+    // Check authentication
     Firebase.auth().onAuthStateChanged((user) => {
-      // Do other things
+      // Loading is totally completed,
+      // trigger the login page or home based on user existence
       this.setState({ 
         isLoadingComplete: true,
         loggedIn: user != null
@@ -101,10 +104,10 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
   statusBarUnderlay: {
     height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: Colors.whiteTransparent,
   },
 });
