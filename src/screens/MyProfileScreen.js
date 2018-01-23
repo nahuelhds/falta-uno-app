@@ -16,6 +16,7 @@ export default class MyProfileScreen extends React.Component {
   state = {
     loading: true,
     user: {
+      phone: null,
       available: true,
       filterByDistance: true,
       distance: 15,
@@ -33,15 +34,27 @@ export default class MyProfileScreen extends React.Component {
 
   async componentWillMount() {
     this._listenUserRef();
-    const  { position, location } = await this._getLocationAsync();
+
+    // Get the online user and merge it
+    const onlineUser = await this._loadUserAsync();
+    const user = Object.assign({}, this.state.user, onlineUser);
+    this.userRef.child('available').set(user.available);
+    this.userRef.child('filterByDistance').set(user.filterByDistance);
+    this.userRef.child('distance').set(user.distance);
+
+    // Get the location and position of the device and upate it online
+    const { position, location } = await this._getLocationAsync();
     this.userRef.child('position').set(position);
     this.userRef.child('location').set(location);
+
+    // We finished the load process
     this.setState({ loading: false });
   }
 
   _listenUserRef() {
     this.userRef.on('value', (snapshot) => {
-      this.setState({ user: snapshot.val() })
+      const user = Object.assign({}, this.state.user, snapshot.val())
+      this.setState({ user })
     })
   }
 
@@ -65,6 +78,7 @@ export default class MyProfileScreen extends React.Component {
           />
           <Text h4>{user.displayName}</Text>
           <Text style={styles.textMuted}>{user.email}</Text>
+          <Text style={styles.textMuted}>{user.phone}</Text>
         </View>
         <List>
           <ListItem
@@ -127,11 +141,8 @@ export default class MyProfileScreen extends React.Component {
   }
 
   async _loadUserAsync() {
-    // Get this data just one time
-    await this.userRef.once('value', (snapshot) => {
-      const newUserState = Object.assign({}, this.state.user, snapshot.val())
-      this.setState({ user: newUserState })
-    })
+    // Get this data just one time and return the data (not the promise)
+    return await this.userRef.once('value').then((snapshot) => snapshot.val())
   }
 
   async _getLocationAsync() {
