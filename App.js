@@ -61,7 +61,7 @@ export default class App extends React.Component {
     // Fonts
     const fontAssets = cacheFonts([
       { ...Ionicons.font },
-      { ...FontAwesome.font },
+      { ...FontAwesome.font }
     ]);
 
     // Images cache
