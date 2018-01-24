@@ -6,3 +6,5 @@ node_modules/**/*
 src/config/development.js
 src/config/staging.js
 src/config/production.js
+
+package-lock.json
