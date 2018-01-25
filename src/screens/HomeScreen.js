@@ -34,8 +34,10 @@ export default class HomeScreen extends React.Component {
     Firebase.database().ref(`users/${me.uid}`)
       .on('value', (snapshot) => {
         this.setState( { currUser: snapshot.val() } );
+        this._getNearPlayers(me.uid);
+        this._filterLongDistancePlayers();
       })
-    this._getNearPlayers(me.uid);
+
   }
 
   /** It uses the userKey to remove the user itself in the players List */
@@ -43,8 +45,22 @@ export default class HomeScreen extends React.Component {
     this.usersRef.on("value", (snapshot) => {
       let playerList = snapshot.val()
       delete playerList[userKey]
-      this.setState({ loading: false, players: playerList });
+      this.setState({ players: playerList });
     })
+  }
+
+  _filterLongDistancePlayers() {
+    const currUser = this.state.currUser
+    const keys = Object.keys(this.state.players)
+    let players = this.state.players
+    if(currUser) {
+      keys.forEach( (key) => {
+        if(this.state.currUser.distance <= parseInt(this._calculatePlayerDistance(currUser, players[key]))) {
+          delete players[key]
+        } 
+      })
+      this.setState({loading: false, players: players })
+    }
   }
 
   _calculatePlayerDistance(currUser, otherPlayer) {
