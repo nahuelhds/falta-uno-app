@@ -19,7 +19,8 @@ export default class HomeScreen extends React.Component {
       loading: true,
       search: "",
       currentPosition: {},
-      players: {}
+      players: {},
+      currUser: {}
     }
   }
 
@@ -29,18 +30,46 @@ export default class HomeScreen extends React.Component {
   });
 
   componentWillMount() {
-    this._getNearPlayers();
+    let me = Firebase.auth().currentUser;
+    Firebase.database().ref(`users/${me.uid}`)
+      .on('value', (snapshot) => {
+        this.setState( { currUser: snapshot.val() } );
+      })
+    this._getNearPlayers(me.uid);
   }
 
-  _getNearPlayers() {
+  /** It uses the userKey to remove the user itself in the players List */
+  _getNearPlayers(userKey) {
     this.usersRef.on("value", (snapshot) => {
-      const players = snapshot.val()
-      this.setState({ loading: false, players: players ? players : {} });
+      let playerList = snapshot.val()
+      delete playerList[userKey]
+      this.setState({ loading: false, players: playerList });
     })
   }
 
-  render() {
+  _calculatePlayerDistance(currUser, otherPlayer) {
+    const R = 6371;
 
+    const cuLat = currUser.position.coords.latitude;
+    const cuLong = currUser.position.coords.longitude;
+    const opLat = otherPlayer.position.coords.latitude;
+    const opLong = otherPlayer.position.coords.longitude;
+
+    let dLat = this._deg2rad(opLat - cuLat);
+    let dLon = this._deg2rad(opLong - cuLong); 
+    let a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(this._deg2rad(cuLat)) * Math.cos(this._deg2rad(opLat)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+     
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let d = R * c;
+    return d;
+  }
+
+  _deg2rad(deg) { return deg * (Math.PI/180) }
+  
+  render() {
     if (this.state.loading) {
       return <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
@@ -48,6 +77,7 @@ export default class HomeScreen extends React.Component {
     } else {
       const players = this.state.players
       const playersKeys = Object.keys(players)
+      const currUser = this.state.currUser
       if (playersKeys.length) {
         return (
           <View style={styles.container}>
@@ -59,7 +89,15 @@ export default class HomeScreen extends React.Component {
               onChangeText={(search) => { this.setState({ search }) }}
               placeholder={Lang.t('home.placeholder')} />
             <ScrollView>
-              {playersKeys.map((key) => <PlayerCard player={players[key]} key={key} />)}
+              { playersKeys.map((key) => {
+                if(currUser) {
+                  const dist = parseInt(this._calculatePlayerDistance(currUser, players[key]));
+                  return <PlayerCard 
+                  player={ players[key] } key={ key } 
+                  distance={ dist } />
+                }}) 
+              }
+
             </ScrollView>
           </View>
         )
