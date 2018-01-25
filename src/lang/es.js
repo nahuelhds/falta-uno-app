@@ -3,9 +3,17 @@ export default {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
   },
+  addMatch: {
+    title: `Nuevo partido`,
+    name: `Nombre del partido`,
+    place: `Lugar`
+  },
+  action: {
+    add: `Agregar`,
+    close: `Cerrar`,
+  },
   home: {
-    title: `Inicio`,
-    placeholder: `Escribí para filtrar...`,
+    title: `Cerca tuyo`,
     noPlayers: `No hay jugadores disponibles por ahora`,
   },
   login: {
@@ -24,8 +32,10 @@ export default {
       permissionDenied: `Permisos denegados`
     }
   },
-  myMatches: {
-    title: `Mis partidos`
+  matchSelector: {
+    title: `Selección de partido`,
+    noMatchesAvailable: `No tenés ningún partido`,
+    addMatch: `Agregar partido`
   },
   myProfile: {
     title: `Perfil`,
@@ -60,5 +70,13 @@ export default {
     defaultText: "Hola, falta uno para jugar. Te interesa?",
     invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",
     invalidPhoneNumberTitle: "Número inválido. "
+  },
+  playerCard: {
+    fromDistance: `A {{distance}} km de distancia`
+  },
+  whatsapp: {
+    buttonTitle: `Invitar por WhatsApp`,
+    urlNotSupported: `Can't handle url: {{url}}`,
+    urlUnkownError: `An error occurred.\n{{err}}`,
   }
 }

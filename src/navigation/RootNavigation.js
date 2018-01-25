@@ -1,22 +1,26 @@
 import { Notifications } from 'expo';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
+import { Alert } from 'react-native';
+
+import registerForPushNotificationsAsync from 'api/registerForPushNotificationsAsync';
 
 import MainTabNavigator from 'navigation/MainTabNavigator';
-import registerForPushNotificationsAsync from 'api/registerForPushNotificationsAsync';
+import MatchSelectorNavigator from 'navigation/MatchSelectorNavigator';
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
       screen: MainTabNavigator,
     },
+    MatchSelector: {
+      screen: MatchSelectorNavigator
+    }
   },
   {
-    navigationOptions: () => ({
-      headerTitleStyle: {
-        fontWeight: 'normal',
-      },
-    }),
+    navigationOptions: {
+      headerBackTitle: null,
+    },
   }
 );
 
@@ -45,6 +49,6 @@ export default class RootNavigator extends React.Component {
   }
 
   _handleNotification = ({ origin, data }) => {
-    console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
+    Alert.alert(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
   };
 }

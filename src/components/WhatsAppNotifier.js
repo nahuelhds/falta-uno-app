@@ -4,59 +4,49 @@ import { Button } from 'react-native-elements'
 import Lang from 'lang'
 
 import { format } from 'libphonenumber-js'
+import Colors from 'constants/Colors';
 
 export default class PlayerCard extends React.Component {
 
-    constructor(props) {
-        super(props)
+  sendNotification() {
+    const player = this.props.player
+    // See: https://www.npmjs.com/package/libphonenumber-js#formatparsednumber-format-options
+    let phone = format(player.phone, 'E.164')
+
+    if (!phone) {
+      return Alert.alert(
+        Lang.t("invite.invalidPhoneNumberTitle"),
+        Lang.t("invite.invalidPhoneNumber"),
+        [{ text: 'OK' }, { cancelable: true }]
+      )
     }
 
-    sendNotification() {
-        
-        const player = this.props.player
-        // See: https://www.npmjs.com/package/libphonenumber-js#formatparsednumber-format-options
-        let phone = format(player.phone, 'E.164')
-        console.log("Phone is " + phone);
+    let defaultText = Lang.t('invite.defaultText')
+    let url = this.buildWhatsAppUrl(phone, defaultText)
 
-        if(phone){
-            let defaultText = Lang.t('invite.defaultText')
-            let url = this.buildWhatsAppUrl(phone, defaultText)
-            Linking.canOpenURL(url).then(supported => {
-                if (!supported) {
-                console.warn('Can\'t handle url: ' + url);
-                } else {
-                return Linking.openURL(url);
-                }
-            }).catch(err => console.error('An error occurred', err));
-        } else {
-            // Works on both iOS and Android
-            Alert.alert(
-                Lang.t("invite.invalidPhoneNumberTitle"),
-                Lang.t("invite.invalidPhoneNumber"),
-                [
-                // {text: 'Save for later', onPress: () => console.log('Save for later pressed')},
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-                ],
-                { cancelable: true })
-        }
-    }
+    Linking.canOpenURL(url).then(supported => {
+      if (!supported) {
+        return Alert.alert(Lang.t(`whatsapp.urlNotSupported`, { url }));
+      }
+      return Linking.openURL(url);
+    }).catch(err => Alert.alert(Lang.t(`whatsapp.urlUnkownError`, { err })));
+  }
 
-    buildWhatsAppUrl(phone, text){
-        // From https://faq.whatsapp.com/es/android/26000030/?category=5245251
-        // https://api.whatsapp.com/send?phone=numerodetelefonodewhatsapp&text=urldelmensaje
-        return `https://api.whatsapp.com/send?text=${text}&phone=${phone}`;
-    }
+  buildWhatsAppUrl(phone, text) {
+    // https://faq.whatsapp.com/es/android/26000030/?category=5245251
+    return `https://api.whatsapp.com/send?text=${text}&phone=${phone}`;
+  }
 
-    render() {
-        return (
-            <Button
-                small
-                iconRight={{name: 'sms'}} // TODO ideally there should be a 'whatsapp' icon
-                onPress={() => this.sendNotification()} // https://stackoverflow.com/questions/42329240/react-native-onpress-being-called-automatically
-                // title="Text me"
-                color="#841584"
-                accessibilityLabel="Send WhatsApp to the player"
-            />
-        )
-    }
+  render() {
+    return (
+      <Button
+        small
+        iconRight={{ name: 'logo-whatsapp', type: 'ionicon' }} // TODO ideally there should be a 'whatsapp' icon
+        onPress={() => this.sendNotification()}
+        backgroundColor={Colors.whatsapp}
+        title={Lang.t(`whatsapp.buttonTitle`)}
+        accessibilityLabel={Lang.t(`whatsapp.buttonTitle`)}
+      />
+    )
+  }
 }
