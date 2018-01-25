@@ -35,24 +35,22 @@ export default class HomeScreen extends React.Component {
       .on('value', (snapshot) => {
         this.setState( { currUser: snapshot.val() } );
         this._getNearPlayers(me.uid);
-        this._filterLongDistancePlayers();
       })
 
   }
 
   /** It uses the userKey to remove the user itself in the players List */
   _getNearPlayers(userKey) {
-    this.usersRef.on("value", (snapshot) => {
-      let playerList = snapshot.val()
-      delete playerList[userKey]
-      this.setState({ players: playerList });
-    })
+      this.usersRef.on('value', (snapshot) => {
+        let playerList = snapshot.val()
+        delete playerList[userKey]
+        this._filterLongDistancePlayers(playerList)
+      });
   }
 
-  _filterLongDistancePlayers() {
+  _filterLongDistancePlayers(players) {
     const currUser = this.state.currUser
-    const keys = Object.keys(this.state.players)
-    let players = this.state.players
+    const keys = Object.keys(players)
     if(currUser) {
       keys.forEach( (key) => {
         if(this.state.currUser.distance <= parseInt(this._calculatePlayerDistance(currUser, players[key]))) {
