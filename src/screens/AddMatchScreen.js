@@ -27,7 +27,7 @@ export default class AddMatchScreen extends React.Component {
     )
 
     if (params.isSaving) {
-      headerRight = <ActivityIndicator style={styles.headerButton} />;
+      headerRight = <ActivityIndicator style={styles.headerActivityIndicator} />;
     }
 
     return {
@@ -81,6 +81,7 @@ export default class AddMatchScreen extends React.Component {
       </View>
     )
   }
+
   _handleSave = () => {
     // Update state, show ActivityIndicator
     this.props.navigation.setParams({ isSaving: true });
@@ -88,17 +89,17 @@ export default class AddMatchScreen extends React.Component {
     const uid = Firebase.auth().currentUser.uid;
     const db = Firebase.database();
     const key = db.ref().child('matches').push().key;
-
+    const dateTimestamp = this.state.date.getTime()
     const match = {
       name: this.state.name,
       place: this.state.place,
-      date: this.state.date.getTime(),
+      date: dateTimestamp,
       createdAt: Firebase.database.ServerValue.TIMESTAMP
     };
 
     let updates = {};
     updates['/matches/' + key] = match;
-    updates['/users/' + uid + '/matches/' + key] = true;
+    updates['/users/' + uid + '/matches/' + key] = { date: dateTimestamp }
 
     db.ref().update(updates).then(() => {
       this.props.navigation.setParams({ isSaving: false });
@@ -138,6 +139,10 @@ export default class AddMatchScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  headerActivityIndicator:{
+    marginLeft: 15,
+    marginRight: 15,
   },
   headerButton: {
     color: Colors.tintColor,
