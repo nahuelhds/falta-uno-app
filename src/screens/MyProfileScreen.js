@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { ActivityIndicator, Alert, Picker, StyleSheet, View, ScrollView } from 'react-native';
-import { Avatar, List, ListItem, Slider, Text } from 'react-native-elements';
+import { List, ListItem, Slider } from 'react-native-elements';
 import { Location, Permissions } from 'expo';
 import { parse, format, isValidNumber } from 'libphonenumber-js'
+
+import PlayerCard from 'components/PlayerCard';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
@@ -93,24 +95,9 @@ export default class MyProfileScreen extends React.Component {
       phoneNumberPlacholder = Lang.t(`country.phoneData.${user.phone.country}.placeholder`)
     }
 
-    let phoneNumberLabel = null
-    if (user.phone) {
-      phoneNumberLabel = format(user.phone, 'International')
-    }
-
     return (
       <ScrollView>
-        <View style={styles.container}>
-          <Avatar
-            large
-            rounded
-            source={{ uri: user.photoURL }}
-            containerStyle={styles.avatar}
-          />
-          <Text h4>{user.displayName}</Text>
-          <Text style={styles.textMuted}>{user.email}</Text>
-          <Text style={styles.textMuted}>{phoneNumberLabel}</Text>
-        </View>
+        <PlayerCard player={user} />
         <List>
           <ListItem
             hideChevron
@@ -279,10 +266,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  container: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
   sliderLabel: {
     color: Colors.muted,
     fontSize: 14,
@@ -290,9 +273,6 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: Colors.muted
-  },
-  textMuted: {
-    color: Colors.muted,
   },
   picker: {
     padding: 0,

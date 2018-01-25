@@ -11,6 +11,8 @@ import I18n from 'lang'
 import RootNavigation from 'navigation/RootNavigation';
 import LoginScreen from 'screens/LoginScreen';
 
+require('moment/locale/es')
+
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === 'string') {

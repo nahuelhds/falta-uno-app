@@ -14,10 +14,10 @@ const theme = {
 
 const social = {
   facebook: '#3b5998',
+  whatsapp: '#128c7e',
 }
 
 export default {
-  // boilerplate
   tintColor,
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,

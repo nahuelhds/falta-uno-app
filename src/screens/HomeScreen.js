@@ -1,11 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, ScrollView, View, StyleSheet } from 'react-native';
-import { SearchBar, Text } from 'react-native-elements';
+import { SearchBar, Text, ListItem, List } from 'react-native-elements';
 import Colors from 'constants/Colors';
 import Lang from 'lang';
 import * as Firebase from 'firebase';
-
-import PlayerCard from '../components/PlayerCard';
 
 export default class HomeScreen extends React.Component {
 
@@ -70,19 +68,19 @@ export default class HomeScreen extends React.Component {
     const opLong = otherPlayer.position.coords.longitude;
 
     let dLat = this._deg2rad(opLat - cuLat);
-    let dLon = this._deg2rad(opLong - cuLong); 
-    let a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(this._deg2rad(cuLat)) * Math.cos(this._deg2rad(opLat)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-     
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let dLon = this._deg2rad(opLong - cuLong);
+    let a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this._deg2rad(cuLat)) * Math.cos(this._deg2rad(opLat)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     let d = R * c;
     return d;
   }
 
-  _deg2rad(deg) { return deg * (Math.PI/180) }
-  
+  _deg2rad(deg) { return deg * (Math.PI / 180) }
+
   render() {
     if (this.state.loading) {
       return <View style={styles.loadingContainer}>
@@ -103,15 +101,26 @@ export default class HomeScreen extends React.Component {
               onChangeText={(search) => { this.setState({ search }) }}
               placeholder={Lang.t('home.placeholder')} />
             <ScrollView>
-              { playersKeys.map((key) => {
-                if(currUser) {
-                  const dist = parseInt(this._calculatePlayerDistance(currUser, players[key]));
-                  return <PlayerCard 
-                  player={ players[key] } key={ key } 
-                  distance={ dist } />
-                }}) 
-              }
-
+              <List>
+                {
+                  playersKeys.map((key) => {
+                    if (currUser) {
+                      const dist = parseInt(this._calculatePlayerDistance(currUser, players[key]));
+                      const player = players[key];
+                      return (
+                        <ListItem
+                          key={player.uid}
+                          roundAvatar
+                          title={player.displayName}
+                          avatar={{ uri: player.photoURL }}
+                          subtitle={Lang.t(`playerCard.fromDistance`, { distance: dist })}
+                          onPress={() => this.props.navigation.navigate('MatchSelector', { player })}
+                        />
+                      )
+                    }
+                  })
+                }
+              </List>
             </ScrollView>
           </View>
         )
