@@ -35,6 +35,7 @@ export default {
   },
   matchSelector: {
     title: `Selección de partido`,
+    label: `¿A qué partido querés invitar a {{displayName}}?`,
     noMatchesAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`
   },
@@ -68,6 +69,9 @@ export default {
     }
   },
   invite: {
+    title: `Invitar a {{name}}`,
+    invitationTitle: `Invitación a...`,
+    matchPlaceholder: `Se juega en {{place}}`,
     defaultText: "Hola, falta uno para jugar. Te interesa?",
     invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",
     invalidPhoneNumberTitle: "Número inválido. "
@@ -76,7 +80,7 @@ export default {
     fromDistance: `A {{distance}} km de distancia`
   },
   whatsapp: {
-    buttonTitle: `Invitar por WhatsApp`,
+    buttonTitle: `Enviar un WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
   }

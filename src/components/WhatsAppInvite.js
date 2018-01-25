@@ -6,7 +6,7 @@ import Lang from 'lang'
 import { format } from 'libphonenumber-js'
 import Colors from 'constants/Colors';
 
-export default class PlayerCard extends React.Component {
+export default class WhatsAppInvite extends React.Component {
 
   sendNotification() {
     const player = this.props.player

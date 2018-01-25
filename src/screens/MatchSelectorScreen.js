@@ -24,7 +24,7 @@ export default class MatchSelectorScreen extends React.Component {
     db.ref(`users/${uid}/matches`).orderByChild('date').on('child_added', (userMatch) => {
       matchesRef.child(userMatch.key).once('value', (matchSnap) => {
         let match = {
-          [matchSnap.key] : matchSnap.val()
+          [matchSnap.key]: matchSnap.val()
         }
         const matches = Object.assign({}, this.state.matches, match)
         this.setState({ matches })
@@ -37,6 +37,7 @@ export default class MatchSelectorScreen extends React.Component {
   }
 
   render() {
+    const { player } = this.props.navigation.state.params;
     const matches = this.state.matches
     const matchesKeys = Object.keys(matches)
     return (
@@ -47,6 +48,7 @@ export default class MatchSelectorScreen extends React.Component {
           </View>
         ) : (
             <ScrollView>
+              <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
               <List>
                 {matchesKeys.map((key) => {
                   const match = matches[key]
@@ -56,7 +58,7 @@ export default class MatchSelectorScreen extends React.Component {
                       title={match.name}
                       subtitle={match.place}
                       rightTitle={moment(match.date).calendar()}
-                    // onPress={() => this.props.navigation.navigate('MatchSelector', { player })}
+                      onPress={() => this.props.navigation.navigate('Invite', { player, match })}
                     />
                   )
                 })}
@@ -87,6 +89,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 24,
     color: Colors.muted
+  },
+  label: {
+    textAlign: 'center',
+    marginTop: 15,
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
   },
   addMatchButtonContainer: {
     bottom: 0,

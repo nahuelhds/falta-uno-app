@@ -1,28 +1,34 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import { Card, Avatar, ListItem } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 
-import WhatsAppNotifier from './WhatsAppNotifier';
-import Lang from 'lang';
+import Colors from 'constants/Colors';
 
 export default class PlayerCard extends React.Component {
-
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     const player = this.props.player
     return (
-      <Card>
-        <ListItem
-          roundAvatar
-          title={player.displayName}
-          avatar={{ uri: player.photoURL }}
-          subtitle={Lang.t(`playerCard.fromDistance`, { distance: this.props.distance })}
+      <View style={styles.container}>
+        <Avatar
+          large
+          rounded
+          source={{ uri: player.photoURL }}
+          containerStyle={styles.avatar}
         />
-        <WhatsAppNotifier player={player} />
-      </Card>
+        <Text h4>{player.displayName}</Text>
+        <Text style={styles.textMuted}>{player.email}</Text>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  textMuted: {
+    color: Colors.muted,
+  },
+})
