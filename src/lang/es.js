@@ -5,8 +5,9 @@ export default {
   },
   addMatch: {
     title: `Nuevo partido`,
-    name: `Nombre del partido`,
-    place: `Lugar`
+    nameLabel: `Nombre del partido`,
+    placeLabel: `¿Dónde se juega?`,
+    dateLabel: `¿Cuándo?`
   },
   action: {
     add: `Agregar`,
