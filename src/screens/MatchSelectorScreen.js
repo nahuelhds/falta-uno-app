@@ -15,9 +15,11 @@ export default class MatchSelectorScreen extends React.Component {
     title: Lang.t('matchSelector.title'),
   })
 
-  constructor(props) {
-    super(props);
+  state = {
+    matches: {}
+  }
 
+  componentDidMount(){
     const uid = Firebase.auth().currentUser.uid
     const db = Firebase.database()
     const matchesRef = db.ref('matches')
@@ -30,10 +32,6 @@ export default class MatchSelectorScreen extends React.Component {
         this.setState({ matches })
       })
     })
-  }
-
-  state = {
-    matches: {}
   }
 
   render() {
