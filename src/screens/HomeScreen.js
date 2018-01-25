@@ -90,16 +90,18 @@ export default class HomeScreen extends React.Component {
       const players = this.state.players
       const playersKeys = Object.keys(players)
       const currUser = this.state.currUser
+
+      // <SearchBar
+      //   clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
+      //   containerStyle={styles.searchBar}
+      //   inputStyle={styles.input}
+      //   lightTheme
+      //   onChangeText={(search) => { this.setState({ search }) }}
+      //   placeholder={Lang.t('home.placeholder')} />
+
       if (playersKeys.length) {
         return (
           <View style={styles.container}>
-            <SearchBar
-              clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
-              containerStyle={styles.searchBar}
-              inputStyle={styles.input}
-              lightTheme
-              onChangeText={(search) => { this.setState({ search }) }}
-              placeholder={Lang.t('home.placeholder')} />
             <ScrollView>
               <List>
                 {
