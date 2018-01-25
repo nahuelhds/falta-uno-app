@@ -13,6 +13,7 @@ export default class PlayerCard extends React.Component {
     render() {
         const player = this.props.player
         return (
+            
             <Card flexDirection='row'>
                { /** <WhatsAppNotifier player={player}/> **/ } 
                 <Avatar
@@ -26,7 +27,7 @@ export default class PlayerCard extends React.Component {
                     <Text style = { styles.playerName }> { player.displayName } </Text>
                     <Text style = { styles.playerDistance }> A { this.props.distance } km de distancia </Text>
                 </View>
-            </Card>
+            </Card> 
         )
     }
 }

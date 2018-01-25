@@ -78,7 +78,6 @@ export default class HomeScreen extends React.Component {
       const players = this.state.players
       const playersKeys = Object.keys(players)
       const currUser = this.state.currUser
-      console.log(playersKeys)
       if (playersKeys.length) {
         return (
           <View style={styles.container}>
@@ -90,13 +89,15 @@ export default class HomeScreen extends React.Component {
               onChangeText={(search) => { this.setState({ search }) }}
               placeholder={Lang.t('home.placeholder')} />
             <ScrollView>
-              
-              {playersKeys.map((key) => {
-                const dist = this._calculatePlayerDistance(currUser, players[key]);
-                <PlayerCard 
-                player={players[key]} key={key} 
-                distance={ dist } />
-                }) }
+              { playersKeys.map((key) => {
+                if(currUser) {
+                  const dist = parseInt(this._calculatePlayerDistance(currUser, players[key]));
+                  return <PlayerCard 
+                  player={ players[key] } key={ key } 
+                  distance={ dist } />
+                }}) 
+              }
+
             </ScrollView>
           </View>
         )
