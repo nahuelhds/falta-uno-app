@@ -15,6 +15,7 @@ export default {
   },
   home: {
     title: `Cerca tuyo`,
+    placeholder: `Escribe para filtrar`,
     noPlayers: `No hay jugadores disponibles por ahora`,
   },
   login: {

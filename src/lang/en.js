@@ -3,6 +3,16 @@ export default {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
   },
+  addMatch: {
+    title: `New match`,
+    nameLabel: `Match name`,
+    placeLabel: `Where is the match?`,
+    dateLabel: `When is the match?`
+  },
+  action: {
+    add: `Add`,
+    close: `Close`,
+  },
   home: {
     title: `Home`,
     placeholder: `Write to filter...`,
@@ -24,16 +34,55 @@ export default {
       permissionDenied: `Permission to access location was denied`
     }
   },
-  myMatches: {
-    title: `My matches`
+  matchSelector: {
+    title: `Match selection`,
+    label: `What match do you want to invite {{displayName}} to?`,
+    noMatchesAvailable: `You have no available matches`,
+    addMatch: `Add match`
   },
   myProfile: {
+    title: `Profile`,
     available: `Show me available to play`,
     distance: `Until {{distance}} km. arround`,
     filterByDistance: `Filter matches by distance`,
     logout: `Log out`,
     logoutSuccess: `Logout successful`,
+    myLocation: `My location`,
+    phoneCountryLabel: `Country`,
     phoneNumber: `Phone number`,
-    title: `Profile`,
+    phoneNumberEmptyPlacholder: `Select country`,
+    invalidPhoneNumber: `The phone number doesn't match with any valid format for your country`
   },
+  country: {
+    list: {
+      AR: `Argentina`,
+      UY: `Uruguay`,
+    },
+    phoneData: {
+      AR: {
+        code: `+54 9`,
+        placeholder: `11 2345-6789`,
+      },
+      UY: {
+        code: `+598`,
+        placeholder: '99 123 456',
+      },
+    }
+  },
+  invite: {
+    title: `{{name}}'s invitation`,
+    invitationTitle: `Invitation to...`,
+    matchPlaceholder: `It'll be played at {{place}}`,
+    defaultText: "Hi. We need one player for our match. Wanna join in?",
+    invalidPhoneNumber: `This player didn't set up the phone. We can do nothing :(`,
+    invalidPhoneNumberTitle: "Invalid phone number. "
+  },
+  playerCard: {
+    fromDistance: `At {{distance}} km away`
+  },
+  whatsapp: {
+    buttonTitle: `Send a WhatsApp message`,
+    urlNotSupported: `Can't handle url: {{url}}`,
+    urlUnkownError: `An error occurred.\n{{err}}`,
+  }
 }
