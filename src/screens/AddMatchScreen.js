@@ -59,6 +59,7 @@ export default class AddMatchScreen extends React.Component {
           minimumDate={new Date()}
           minuteInterval={15}
           onDateChange={(date) => this.setState({ date: date })}
+          locale={Lang.currentLocale()}
         />
       )
     } else {
