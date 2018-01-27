@@ -5,7 +5,7 @@ import Colors from 'constants/Colors';
 import Lang from 'lang';
 import * as Firebase from 'firebase';
 
-export default class HomeScreen extends React.Component {
+export default class NearPlayerScreen extends React.Component {
 
   constructor(props) {
     super(props);

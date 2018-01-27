@@ -6,7 +6,8 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 import Colors from 'constants/Colors';
 
 import MyProfileScreen from 'screens/MyProfileScreen';
-import HomeScreen from 'screens/HomeScreen';
+import NearPlayersScreen from 'screens/NearPlayersScreen';
+import NearPlayerScreen from '../screens/NearPlayersScreen';
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
@@ -20,7 +21,7 @@ const iconResolver = (navigation, focused) => {
       iconName =
         Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
       break;
-    case 'Home':
+    case 'NearPlayers':
       iconName =
         Platform.OS === 'ios'
           ? `ios-home${focused ? '' : '-outline'}`
@@ -42,15 +43,15 @@ const iconResolver = (navigation, focused) => {
 
 export default TabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
+    NearPlayers: {
+      screen: NearPlayerScreen,
     },
     MyProfile: {
       screen: MyProfileScreen,
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'NearPlayers',
     navigationOptions: navigationResolver,
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
