@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, ScrollView, View, StyleSheet } from 'react-native';
-import { SearchBar, Text, ListItem, List } from 'react-native-elements';
+import { SearchBar, Text, ListItem, List, Icon } from 'react-native-elements';
 import Colors from 'constants/Colors';
 import Lang from 'lang';
 import * as Firebase from 'firebase';
@@ -23,8 +23,10 @@ export default class HomeScreen extends React.Component {
   }
 
   // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     title: Lang.t('home.title'),
+      headerRight: (<Icon name='settings' color={ Colors.tabIconSelected }
+      onPress={ () => navigation.navigate('MyProfile') } />)
   });
 
   componentWillMount() {
