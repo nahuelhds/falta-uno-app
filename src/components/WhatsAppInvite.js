@@ -5,11 +5,63 @@ import Lang from 'lang'
 
 import { format } from 'libphonenumber-js'
 import Colors from 'constants/Colors';
+import GoogleMapsService from '../services/GoogleMapsService'
+const dateFormat = require('dateformat');
+
+dateFormat.i18n = {
+  dayNames: [
+      'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab',
+      'Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'
+  ],
+  monthNames: [
+      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ],
+  timeNames: [
+      'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
+  ]
+};
+
+const googleMapsService = new GoogleMapsService();
+
+const buildWhatsAppUrl = (phone, text) => {
+  // https://faq.whatsapp.com/es/android/26000030/?category=5245251
+  return `https://api.whatsapp.com/send?text=${text}&phone=${phone}`;
+}
+
+const buildText = (playerName, date, place, mapUrl) => {
+  //TODO fetch from Lang
+  return `Hola soy ${playerName} y te invito a un doparti el ${dateFormat(date, "dddd d mmmm, yyyy, h:MM TT")}, en ${place} ${mapUrl}`
+          "\n-------\n"
+          "Mensaje enviado desde Falta Uno App\n"
+          "<Pedí tu acceso de prueba $contacto>"
+}
+
+const generateLinkFromLocation = (place) => {
+  return googleMapsService.geocodeFromAddress(place)
+    .then((geocodeFromAddress) => {
+      console.log("geocodefromaddress result", geocodeFromAddress)
+      let targetLocation = geocodeFromAddress
+      console.log("targetLocation ", targetLocation)
+      let sourceLocation = {}
+      console.log("targetLocation ", targetLocation)
+      return googleMapsService.link({longitude: targetLocation.lng, latitude: targetLocation.lat}, {longitude: sourceLocation.lng, latitude: sourceLocation.lat})
+    })
+    .catch((err) => {
+      console.error(`Error while geocoding ${place}`, err)
+      return ""
+    })
+  
+}
 
 export default class WhatsAppInvite extends React.Component {
 
   sendNotification() {
     const player = this.props.player
+    const match = this.props.match
+    const date = match.date
+    const place = match.place
+
     // See: https://www.npmjs.com/package/libphonenumber-js#formatparsednumber-format-options
     let phone = format(player.phone, 'E.164')
 
@@ -21,27 +73,48 @@ export default class WhatsAppInvite extends React.Component {
       )
     }
 
-    let defaultText = Lang.t('invite.defaultText')
-    let url = this.buildWhatsAppUrl(phone, defaultText)
+    var text = Lang.t('invite.defaultText')
 
-    Linking.canOpenURL(url).then(supported => {
-      if (!supported) {
-        return Alert.alert(Lang.t(`whatsapp.urlNotSupported`, { url }));
-      }
-      return Linking.openURL(url);
-    }).catch(err => Alert.alert(Lang.t(`whatsapp.urlUnkownError`, { err })));
-  }
+    console.log(`Place ${place} and date ${date}`)
 
-  buildWhatsAppUrl(phone, text) {
-    // https://faq.whatsapp.com/es/android/26000030/?category=5245251
-    return `https://api.whatsapp.com/send?text=${text}&phone=${phone}`;
+    //TODO refactor this
+    if(place && date){
+      generateLinkFromLocation(place)
+        .then((link) => {
+          console.log(`Link is ${link}`)
+          text = buildText(player.name, date, place, link)
+          console.log(`Link is now ${link}`)
+          return text;
+        })
+        .then((newText) => {
+          console.log(`about to send new message ${newText}`)
+          let url = buildWhatsAppUrl(phone, newText)
+      
+          Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+              return Alert.alert(Lang.t(`whatsapp.urlNotSupported`, { url }));
+            }
+            return Linking.openURL(url);
+          }).catch(err => Alert.alert(Lang.t(`whatsapp.urlUnkownError`, { err })));
+        })
+    } else {
+      console.log(`about to send message ${text}`)
+      let url = buildWhatsAppUrl(phone, text)
+  
+      Linking.canOpenURL(url).then(supported => {
+        if (!supported) {
+          return Alert.alert(Lang.t(`whatsapp.urlNotSupported`, { url }));
+        }
+        return Linking.openURL(url);
+      }).catch(err => Alert.alert(Lang.t(`whatsapp.urlUnkownError`, { err })));
+    }
   }
 
   render() {
     return (
       <Button
         small
-        iconRight={{ name: 'logo-whatsapp', type: 'ionicon' }} // TODO ideally there should be a 'whatsapp' icon
+        iconRight={{ name: 'logo-whatsapp', type: 'ionicon' }}
         onPress={() => this.sendNotification()}
         backgroundColor={Colors.whatsapp}
         title={Lang.t(`whatsapp.buttonTitle`)}
