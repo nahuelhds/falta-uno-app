@@ -1,26 +1,14 @@
 import React from 'react';
 import { Linking, Alert } from 'react-native';
 import { Button } from 'react-native-elements'
+
+import moment from 'moment'
+
 import Lang from 'lang'
 
 import { format } from 'libphonenumber-js'
 import Colors from 'constants/Colors';
 import GoogleMapsService from '../services/GoogleMapsService'
-const dateFormat = require('dateformat');
-
-dateFormat.i18n = {
-  dayNames: [
-      'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab',
-      'Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'
-  ],
-  monthNames: [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-  ],
-  timeNames: [
-      'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
-  ]
-};
 
 const googleMapsService = new GoogleMapsService();
 
@@ -30,11 +18,13 @@ const buildWhatsAppUrl = (phone, text) => {
 }
 
 const buildText = (playerName, date, place, mapUrl) => {
+
+  const dateFromNow = moment().calendar(date) + ' hs.';
   //TODO fetch from Lang
-  return `Hola soy ${playerName} y te invito a un doparti el ${dateFormat(date, "dddd d mmmm, yyyy, h:MM TT")}, en ${place} ${mapUrl}`
-          "\n-------\n"
-          "Mensaje enviado desde Falta Uno App\n"
-          "<Pedí tu acceso de prueba $contacto>"
+  return `Hola soy ${playerName} y te invito a un doparti el ${dateFromNow}, en ${place} ${mapUrl}
+-------
+Mensaje enviado desde Falta Uno App
+<Pedí tu acceso de prueba $contacto>`
 }
 
 const generateLinkFromLocation = (place) => {
