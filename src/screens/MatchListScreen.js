@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { ScrollView, View, StyleSheet } from 'react-native';
-import { List, ListItem, Text, Button, Icon } from 'react-native-elements';
+import { List, ListItem, Text, Icon } from 'react-native-elements';
 import MatchesList from '../components/MatchesList';
+import AddMatchButton from '../components/AddMatchButton';
 
 import * as Firebase from 'firebase';
 import moment from 'moment'
@@ -56,11 +57,7 @@ export default class MatchListScreen extends React.Component {
           </View>
           )
         }
-        <Button
-          title={Lang.t(`matchList.addMatch`)}
-          containerViewStyle={styles.addMatchButtonContainer}
-          backgroundColor={Colors.primary}
-          onPress={() => this.props.navigation.navigate('CreateMatch')} />
+        <AddMatchButton />
       </View>
     )
   }
@@ -86,11 +83,5 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     fontSize: 16,
-  },
-  addMatchButtonContainer: {
-    bottom: 0,
-    marginLeft: 0,
-    position: 'absolute',
-    width: '100%',
   }
 })

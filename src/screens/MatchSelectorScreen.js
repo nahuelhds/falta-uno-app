@@ -3,6 +3,7 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 import MatchesList  from '../components/MatchesList';
+import AddMatchButton from '../components/AddMatchButton';
 
 import * as Firebase from 'firebase';
 
@@ -38,6 +39,11 @@ export default class MatchSelectorScreen extends React.Component {
     this.props.navigation.navigate('Invite', { player, match })
   }
 
+  _onPrssMatchButton(navigation) {
+    navigation = this.props.navigation
+    navigation.navigate('CreateMatch')
+  }
+
   render() {
     const { player } = this.props.navigation.state.params;
     const matches = this.state.matches
@@ -56,11 +62,7 @@ export default class MatchSelectorScreen extends React.Component {
           </View>
           )
         }
-        <Button
-          title={Lang.t(`matchSelector.addMatch`)}
-          containerViewStyle={styles.addMatchButtonContainer}
-          backgroundColor={Colors.primary}
-          onPress={() => this.props.navigation.navigate('AddMatch')} />
+        <AddMatchButton onPress={ (navigation) => this._onPrssMatchButton(navigation) } />
       </View>
     )
   }
