@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ScrollView, View, StyleSheet } from 'react-native';
-import { List, ListItem, Text, Button } from 'react-native-elements';
+import { List, ListItem, Text, Button, Icon } from 'react-native-elements';
 
 import * as Firebase from 'firebase';
 import moment from 'moment'
@@ -10,14 +10,20 @@ import Lang from 'lang'
 import Colors from 'constants/Colors';
 
 export default class MatchListScreen extends React.Component {
-  // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = () => ({
-    title: Lang.t('matchList.title'),
-  })
 
-  state = {
-    matches: {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      matches: {}
+    }
   }
+
+  // Dynamic definition so we can get the actual Lang locale
+  static navigationOptions = ({navigation}) => ({
+    title: Lang.t('matchList.title'),
+    headerRight: (<Icon name='settings' color={ Colors.tabIconSelected }
+    onPress={ () => navigation.navigate('MyProfile') } />)
+  })
 
   componentDidMount(){
     const uid = Firebase.auth().currentUser.uid

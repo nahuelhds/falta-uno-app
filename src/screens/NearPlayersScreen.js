@@ -53,8 +53,7 @@ export default class NearPlayerScreen extends React.Component {
     if(currUser) {
       keys.forEach((key) => {
         const playerDistance = parseInt(this._calculatePlayerDistance(currUser, players[key]))
-        //TODO CAMBIAR LA LOGICA DE MAYOR A MENOR
-        if(currUser.distance >= playerDistance) {
+        if(currUser.distance <= playerDistance) {
           delete players[key]
         } 
       }) 

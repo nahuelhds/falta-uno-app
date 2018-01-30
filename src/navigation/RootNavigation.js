@@ -9,6 +9,7 @@ import MainTabNavigator from 'navigation/MainTabNavigator';
 import MatchSelectorNavigator from 'navigation/MatchSelectorNavigator';
 import InviteScreen from 'screens/InviteScreen';
 import AddMatchScreen from 'screens/AddMatchScreen';
+import MyProfileScreen from 'screens/MyProfileScreen';
 
 const RootStackNavigator = StackNavigator(
   {
@@ -23,6 +24,9 @@ const RootStackNavigator = StackNavigator(
     },
     CreateMatch: {
       screen: AddMatchScreen
+    },
+    MyProfile: {
+      screen: MyProfileScreen
     }
   },
   {
