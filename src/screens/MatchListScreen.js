@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { List, ListItem, Text, Button, Icon } from 'react-native-elements';
+import MatchesList from '../components/MatchesList';
 
 import * as Firebase from 'firebase';
 import moment from 'moment'
@@ -50,22 +51,9 @@ export default class MatchListScreen extends React.Component {
             <Text style={styles.emptyMatchesText}>{Lang.t(`matchList.noMatchesAvailable`)}</Text>
           </View>
         ) : (
-            <ScrollView>
-              <List>
-                {matchesKeys.map((key) => {
-                  const match = matches[key]
-                  return (
-                    <ListItem
-                      key={key}
-                      title={match.name}
-                      subtitle={match.place}
-                      hideChevron={ true }
-                      rightTitle={moment(match.date).calendar()}
-                    />
-                  )
-                })}
-              </List>
-            </ScrollView>
+          <View>
+            <MatchesList matches={ matches } hideChevron={ true } />
+          </View>
           )
         }
         <Button

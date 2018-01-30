@@ -7,7 +7,9 @@ export default class MatchesList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            matches: this.props.matches
+            matches: this.props.matches,
+            player: this.props.player? this.props.player : {},
+            onPress: this.props.onPress? this.props.onPress :  () => {} 
         }
     }
 
@@ -27,7 +29,7 @@ export default class MatchesList extends React.Component {
                         subtitle={match.place}
                         hideChevron={this.props.hideChevron}
                         rightTitle={moment(match.date).calendar()}
-                        onPress={ () => that.props.onPress(match, this.props.player) }
+                        onPress={ () => that.state.onPress(match, this.state.player) }
                         />
                     )
                     })}
