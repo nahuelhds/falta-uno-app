@@ -11,8 +11,6 @@ import I18n from 'lang'
 import RootNavigation from 'navigation/RootNavigation';
 import LoginScreen from 'screens/LoginScreen';
 
-require('moment/locale/es')
-
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === 'string') {
@@ -74,7 +72,15 @@ export default class App extends React.Component {
     ]);
 
     // I18n
-    const langAssets = I18n.initAsync()
+    const langAssets = I18n.initAsync().then(() => {
+      const locale = I18n.locale.split('-')[0];
+      switch(locale){
+        case 'es':
+          require('moment/locale/es');
+          break;
+        default:
+      }
+    })
 
     return Promise.all([
       ...fontAssets,
