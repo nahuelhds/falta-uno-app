@@ -41,7 +41,7 @@ export default class GoogleMapsService {
      */
     geocodeFromAddress(inputAddress){
         return this.geocode({
-            address: inputAddress + "futbol" // to improve search
+            address: inputAddress
         });
     }
 
