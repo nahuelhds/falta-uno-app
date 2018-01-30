@@ -34,7 +34,7 @@ export default class MatchSelectorScreen extends React.Component {
     })
   }
 
-  _onPressMatch(player, match) {
+  _onPressMatch(match, player) {
     this.props.navigation.navigate('Invite', { player, match })
   }
 
@@ -52,7 +52,7 @@ export default class MatchSelectorScreen extends React.Component {
           <View>
             <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
             <MatchesList matches={ matches } player={ player } hideChevron={ false } 
-            onPress= { () => this._onPressMatch } />
+            onPress={ (match, player) => this._onPressMatch(match, player) } />
           </View>
           )
         }

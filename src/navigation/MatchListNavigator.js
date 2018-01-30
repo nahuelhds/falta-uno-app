@@ -1,12 +1,12 @@
 import { StackNavigator } from 'react-navigation';
 
-import MatchCreationScreen from 'screens/MatchCreationScreen';
+import MatchListScreen from 'screens/MatchListScreen';
 import AddMatchScreen from 'screens/AddMatchScreen';
 
-const MatchCreationNavigator = StackNavigator(
+const MatchListNavigator = StackNavigator(
   {
     MatchCreation: {
-      screen: MatchCreationScreen
+      screen: MatchListScreen
     },
     CreateMatch: {
       screen: AddMatchScreen
@@ -18,4 +18,4 @@ const MatchCreationNavigator = StackNavigator(
   }
 );
 
-export default MatchCreationNavigator
+export default MatchListNavigator

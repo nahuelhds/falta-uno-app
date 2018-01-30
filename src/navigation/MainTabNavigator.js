@@ -5,8 +5,10 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MatchCreationScreen from '../screens/MatchCreationScreen';
+import MatchListScreen from '../screens/MatchListScreen';
 import NearPlayerScreen from '../screens/NearPlayersScreen';
+import AddMatchScreen from '../screens/AddMatchScreen';
+
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
@@ -43,8 +45,8 @@ export default TabNavigator(
       screen: NearPlayerScreen,
     },
     Matches: {
-      screen: MatchCreationScreen,
-    },
+      screen: MatchListScreen,
+    }
   },
   {
     initialRouteName: 'NearPlayers',

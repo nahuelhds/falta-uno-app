@@ -9,10 +9,10 @@ import moment from 'moment'
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
-export default class MatchCreationScreen extends React.Component {
+export default class MatchListScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
-    title: Lang.t('matchSelector.title'),
+    title: Lang.t('matchList.title'),
   })
 
   state = {
@@ -41,7 +41,7 @@ export default class MatchCreationScreen extends React.Component {
       <View style={styles.container}>
         {!matchesKeys.length ? (
           <View style={styles.emptyMacthesContainer}>
-            <Text style={styles.emptyMatchesText}>{Lang.t(`matchSelector.noMatchesAvailable`)}</Text>
+            <Text style={styles.emptyMatchesText}>{Lang.t(`matchList.noMatchesAvailable`)}</Text>
           </View>
         ) : (
             <ScrollView>
@@ -63,7 +63,7 @@ export default class MatchCreationScreen extends React.Component {
           )
         }
         <Button
-          title={Lang.t(`matchSelector.addMatch`)}
+          title={Lang.t(`matchList.addMatch`)}
           containerViewStyle={styles.addMatchButtonContainer}
           backgroundColor={Colors.primary}
           onPress={() => this.props.navigation.navigate('CreateMatch')} />

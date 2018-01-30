@@ -18,6 +18,7 @@ export default class MatchesList extends React.Component {
             <ScrollView>
                 <List>
                     {matchesKeys.map((key) => {
+                    const that = this;    
                     const match = displayMatches[key]
                     return (
                         <ListItem
@@ -26,7 +27,7 @@ export default class MatchesList extends React.Component {
                         subtitle={match.place}
                         hideChevron={this.props.hideChevron}
                         rightTitle={moment(match.date).calendar()}
-                        onPress={ this.props.onPress(this.props.player, match) }
+                        onPress={ () => that.props.onPress(match, this.props.player) }
                         />
                     )
                     })}
