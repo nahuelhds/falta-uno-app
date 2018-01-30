@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Text, View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
-import MatchesList  from '../components/MatchesList';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import { List, ListItem, Text, Button } from 'react-native-elements';
 
 import * as Firebase from 'firebase';
+import moment from 'moment'
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
-export default class MatchSelectorScreen extends React.Component {
+export default class MatchCreationScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('matchSelector.title'),
@@ -34,12 +34,7 @@ export default class MatchSelectorScreen extends React.Component {
     })
   }
 
-  _onPressMatch(player, match) {
-    this.props.navigation.navigate('Invite', { player, match })
-  }
-
   render() {
-    const { player } = this.props.navigation.state.params;
     const matches = this.state.matches
     const matchesKeys = Object.keys(matches)
     return (
@@ -49,22 +44,32 @@ export default class MatchSelectorScreen extends React.Component {
             <Text style={styles.emptyMatchesText}>{Lang.t(`matchSelector.noMatchesAvailable`)}</Text>
           </View>
         ) : (
-          <View>
-            <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
-            <MatchesList matches={ matches } player={ player } hideChevron={ false } 
-            onPress= { () => this._onPressMatch } />
-          </View>
+            <ScrollView>
+              <List>
+                {matchesKeys.map((key) => {
+                  const match = matches[key]
+                  return (
+                    <ListItem
+                      key={key}
+                      title={match.name}
+                      subtitle={match.place}
+                      hideChevron={ true }
+                      rightTitle={moment(match.date).calendar()}
+                    />
+                  )
+                })}
+              </List>
+            </ScrollView>
           )
         }
         <Button
           title={Lang.t(`matchSelector.addMatch`)}
           containerViewStyle={styles.addMatchButtonContainer}
           backgroundColor={Colors.primary}
-          onPress={() => this.props.navigation.navigate('AddMatch')} />
+          onPress={() => this.props.navigation.navigate('CreateMatch')} />
       </View>
     )
   }
-
 }
 
 const styles = StyleSheet.create({

@@ -5,8 +5,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MyProfileScreen from 'screens/MyProfileScreen';
-import NearPlayersScreen from 'screens/NearPlayersScreen';
+import MatchCreationScreen from '../screens/MatchCreationScreen';
 import NearPlayerScreen from '../screens/NearPlayersScreen';
 
 const navigationResolver = ({ navigation }) => ({
@@ -17,9 +16,9 @@ const iconResolver = (navigation, focused) => {
   const { routeName } = navigation.state;
   let iconName;
   switch (routeName) {
-    case 'MyProfile':
+    case 'Matches':
       iconName =
-        Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
+        Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
       break;
     case 'NearPlayers':
       iconName =
@@ -27,9 +26,6 @@ const iconResolver = (navigation, focused) => {
           ? `ios-home${focused ? '' : '-outline'}`
           : 'md-home';
       break;
-    // case 'MyMatches':
-    //   iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
-    //   break;
   }
   return (
     <Ionicons
@@ -46,8 +42,8 @@ export default TabNavigator(
     NearPlayers: {
       screen: NearPlayerScreen,
     },
-    MyProfile: {
-      screen: MyProfileScreen,
+    Matches: {
+      screen: MatchCreationScreen,
     },
   },
   {

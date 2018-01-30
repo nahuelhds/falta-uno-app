@@ -53,10 +53,11 @@ export default class NearPlayerScreen extends React.Component {
     if(currUser) {
       keys.forEach((key) => {
         const playerDistance = parseInt(this._calculatePlayerDistance(currUser, players[key]))
-        if(currUser.distance <= playerDistance) {
+        //TODO CAMBIAR LA LOGICA DE MAYOR A MENOR
+        if(currUser.distance >= playerDistance) {
           delete players[key]
         } 
-      })
+      }) 
       this.setState({loading: false, players: players })
     }
   }
@@ -92,7 +93,6 @@ export default class NearPlayerScreen extends React.Component {
       const players = this.state.players
       const playersKeys = Object.keys(players)
       const currUser = this.state.currUser
-
       // <SearchBar
       //   clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
       //   containerStyle={styles.searchBar}
