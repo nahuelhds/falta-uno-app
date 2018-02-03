@@ -1,12 +1,12 @@
 import { StackNavigator } from 'react-navigation';
 
-import MatchSelectorScreen from 'screens/MatchSelectorScreen';
+import MyMatchesScreen from 'screens/MyMatchesScreen';
 import MatchAddScreen from 'screens/MatchAddScreen';
 
-const MatchSelectorNavigator = StackNavigator(
+export default StackNavigator(
   {
-    MatchSelector: {
-      screen: MatchSelectorScreen
+    MyMatches: {
+      screen: MyMatchesScreen
     },
     AddMatch: {
       screen: MatchAddScreen
@@ -17,5 +17,3 @@ const MatchSelectorNavigator = StackNavigator(
     headerMode: 'none',
   }
 );
-
-export default MatchSelectorNavigator

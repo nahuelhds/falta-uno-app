@@ -6,7 +6,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 import Colors from 'constants/Colors';
 
 import HomeScreen from 'screens/HomeScreen';
-import MatchListScreen from 'screens/MatchListScreen';
+import MyMatchesNavigator from 'navigation/MyMatchesNavigator';
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
@@ -16,19 +16,15 @@ const iconResolver = (navigation, focused) => {
   const { routeName } = navigation.state;
   let iconName;
   switch (routeName) {
-    case 'MyProfile':
-      iconName =
-        Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
-      break;
     case 'Home':
       iconName =
         Platform.OS === 'ios'
           ? `ios-home${focused ? '' : '-outline'}`
           : 'md-home';
       break;
-    // case 'MyMatches':
-    //   iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
-    //   break;
+    case 'MyMatches':
+      iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
+      break;
   }
   return (
     <Ionicons
@@ -44,6 +40,9 @@ export default TabNavigator(
   {
     Home: {
       screen: HomeScreen,
+    },
+    MyMatches: {
+      screen: MyMatchesNavigator,
     },
   },
   {
