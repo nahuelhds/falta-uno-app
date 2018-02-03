@@ -1,5 +1,6 @@
 node_modules/**/*
 .expo/**/*
+.vscode/settings.json
 .vscode/.react/*
 
 src/config/development.js
