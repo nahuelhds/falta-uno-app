@@ -1,11 +1,24 @@
 import React from 'react';
 import { ActivityIndicator, ScrollView, View, StyleSheet } from 'react-native';
-import { SearchBar, Text, ListItem, List } from 'react-native-elements';
+import { Text, ListItem, List, Icon } from 'react-native-elements';
 import Colors from 'constants/Colors';
 import Lang from 'lang';
 import * as Firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
+  // Dynamic definition so we can get the actual Lang locale
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: Lang.t('home.title'),
+      headerRight: (
+        <Icon name='settings'
+          containerStyle={styles.headerRightIconContainer}
+          iconStyle={styles.headerRightIcon}
+          onPress={() => navigation.navigate('MyProfile')}
+        />
+      )
+    }
+  }
 
   constructor(props) {
     super(props);
@@ -22,40 +35,35 @@ export default class HomeScreen extends React.Component {
     }
   }
 
-  // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = () => ({
-    title: Lang.t('home.title'),
-  });
-
   componentWillMount() {
     let me = Firebase.auth().currentUser;
     Firebase.database().ref(`users/${me.uid}`)
       .on('value', (snapshot) => {
-        this.setState( { currUser: snapshot.val() } );
+        this.setState({ currUser: snapshot.val() });
         this._getNearPlayers(me.uid);
       })
   }
 
   /** It uses the userKey to remove the user itself in the players List */
   _getNearPlayers(userKey) {
-      this.usersRef.on('value', (snapshot) => {
-        let playerList = snapshot.val()
-        delete playerList[userKey]
-        this._filterLongDistancePlayers(playerList)
-      });
+    this.usersRef.on('value', (snapshot) => {
+      let playerList = snapshot.val()
+      delete playerList[userKey]
+      this._filterLongDistancePlayers(playerList)
+    });
   }
 
   _filterLongDistancePlayers(players) {
     const currUser = this.state.currUser
     const keys = Object.keys(players)
-    if(currUser) {
+    if (currUser) {
       keys.forEach((key) => {
         const playerDistance = parseInt(this._calculatePlayerDistance(currUser, players[key]))
-        if(currUser.distance <= playerDistance) {
+        if (currUser.distance <= playerDistance) {
           delete players[key]
-        } 
+        }
       })
-      this.setState({loading: false, players: players })
+      this.setState({ loading: false, players: players })
     }
   }
 
@@ -144,12 +152,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  searchBar: {
-    backgroundColor: Colors.light,
-    width: '100%',
+  headerRightIconContainer: {
+    marginLeft: 15,
+    marginRight: 15,
   },
-  input: {
-    backgroundColor: Colors.tabBar
+  headerRightIcon: {
+    color: Colors.tintColor,
   },
   emptyPlayers: {
     marginTop: 10,
