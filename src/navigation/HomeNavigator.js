@@ -1,9 +1,13 @@
 import { StackNavigator } from 'react-navigation';
 
+import HomeScreen from 'screens/HomeScreen';
 import MyProfileScreen from 'screens/MyProfileScreen';
 
-const MyProfileNavigator = StackNavigator(
+export default StackNavigator(
   {
+    Home: {
+      screen: HomeScreen,
+    },
     MyProfile: {
       screen: MyProfileScreen
     }
@@ -13,5 +17,3 @@ const MyProfileNavigator = StackNavigator(
     headerMode: 'none',
   }
 );
-
-export default MyProfileNavigator

@@ -9,20 +9,18 @@ import { Text, ListItem, List } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: Lang.t('home.title'),
-      headerRight: (
-          <Ionicons
-          name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-settings'}
-          size={28}
-          style={styles.headerRightIconContainer}
-          color={Colors.tintColor}
-          onPress={() => navigation.navigate('MyProfile')}
-        />
-      )
-    }
-  }
+  static navigationOptions = ({ navigation }) => ({
+    title: Lang.t('home.title'),
+    headerRight: (
+      <Ionicons
+        name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-settings'}
+        size={28}
+        style={styles.headerRightIconContainer}
+        color={Colors.tintColor}
+        onPress={() => navigation.navigate('MyProfile')}
+      />
+    )
+  })
 
   constructor(props) {
     super(props);
@@ -159,9 +157,6 @@ const styles = StyleSheet.create({
   headerRightIconContainer: {
     marginLeft: 15,
     marginRight: 15,
-  },
-  headerRightIcon: {
-    color: Colors.tintColor,
   },
   emptyPlayers: {
     marginTop: 10,

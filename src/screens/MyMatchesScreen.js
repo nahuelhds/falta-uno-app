@@ -35,7 +35,4 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
   },
-  headerRightIcon: {
-    color: Colors.tintColor,
-  },
 })

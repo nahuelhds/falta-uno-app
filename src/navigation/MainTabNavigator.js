@@ -5,7 +5,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import HomeScreen from 'screens/HomeScreen';
+import HomeNavigator from 'navigation/HomeNavigator';
 import MyMatchesNavigator from 'navigation/MyMatchesNavigator';
 
 const navigationResolver = ({ navigation }) => ({
@@ -39,7 +39,7 @@ const iconResolver = (navigation, focused) => {
 export default TabNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: HomeNavigator,
     },
     MyMatches: {
       screen: MyMatchesNavigator,
