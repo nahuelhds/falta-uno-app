@@ -16,25 +16,6 @@ export default class MatchListScreen extends React.Component {
     title: Lang.t('matchSelector.title'),
   })
 
-  state = {
-    matches: {}
-  }
-
-  componentDidMount(){
-    const uid = Firebase.auth().currentUser.uid
-    const db = Firebase.database()
-    const matchesRef = db.ref('matches')
-    db.ref(`users/${uid}/matches`).orderByChild('date').on('child_added', (userMatch) => {
-      matchesRef.child(userMatch.key).once('value', (matchSnap) => {
-        let match = {
-          [matchSnap.key]: matchSnap.val()
-        }
-        const matches = Object.assign({}, this.state.matches, match)
-        this.setState({ matches })
-      })
-    })
-  }
-
   render() {
     const { player } = this.props.navigation.state.params;
     return (
