@@ -1,9 +1,11 @@
 import React from 'react';
-import { ActivityIndicator, ScrollView, View, StyleSheet } from 'react-native';
-import { Text, ListItem, List, Icon } from 'react-native-elements';
+import { ActivityIndicator, ScrollView, View, StyleSheet, Platform } from 'react-native';
+import * as Firebase from 'firebase';
+
 import Colors from 'constants/Colors';
 import Lang from 'lang';
-import * as Firebase from 'firebase';
+import { Ionicons } from '@expo/vector-icons';
+import { Text, ListItem, List } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -11,9 +13,11 @@ export default class HomeScreen extends React.Component {
     return {
       title: Lang.t('home.title'),
       headerRight: (
-        <Icon name='settings'
-          containerStyle={styles.headerRightIconContainer}
-          iconStyle={styles.headerRightIcon}
+          <Ionicons
+          name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-settings'}
+          size={28}
+          style={styles.headerRightIconContainer}
+          color={Colors.tintColor}
           onPress={() => navigation.navigate('MyProfile')}
         />
       )

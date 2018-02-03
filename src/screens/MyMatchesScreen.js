@@ -1,21 +1,25 @@
 import React from 'react';
 
-import { View, StyleSheet, Alert, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { StyleSheet, Alert, Platform } from 'react-native';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
 import MyMatchesList from 'components/MyMatchesList';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class MatchListScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('myMatches.title'),
     headerRight: (
-      <Text style={styles.headerButton} onPress={() => navigation.navigate('AddMatch')}>
-        {Lang.t('action.add')}
-      </Text>
+      <Ionicons
+        name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-add'}
+        size={28}
+        style={styles.headerRightIconContainer}
+        color={Colors.tintColor}
+        onPress={() => navigation.navigate('AddMatch')}
+      />
     )
   })
 
@@ -27,10 +31,11 @@ export default class MatchListScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
+  headerRightIconContainer: {
     marginLeft: 15,
     marginRight: 15,
+  },
+  headerRightIcon: {
+    color: Colors.tintColor,
   },
 })
