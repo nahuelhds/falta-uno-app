@@ -44,7 +44,6 @@ export default class MyMatchesList extends React.Component {
     }
     return (
       <ScrollView>
-        {this.props.player ? <Text style={styles.label}>{Lang.t(`matchSelector.label`, this.props.player)}</Text> : null}
         <List>
           {matchesKeys.map((key) => {
             const match = matches[key]
@@ -74,18 +73,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 24,
     color: Colors.muted
-  },
-  label: {
-    textAlign: 'center',
-    marginTop: 15,
-    marginLeft: 15,
-    marginRight: 15,
-    fontSize: 16,
-  },
-  addMatchButtonContainer: {
-    bottom: 0,
-    marginLeft: 0,
-    position: 'absolute',
-    width: '100%',
   }
 })
