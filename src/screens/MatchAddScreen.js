@@ -15,7 +15,7 @@ import Lang from 'lang'
 import Colors from 'constants/Colors';
 
 
-export default class AddMatchScreen extends React.Component {
+export default class MatchAddScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;

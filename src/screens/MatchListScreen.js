@@ -9,7 +9,7 @@ import moment from 'moment'
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
-export default class MatchSelectorScreen extends React.Component {
+export default class MatchListScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('matchSelector.title'),

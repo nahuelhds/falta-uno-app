@@ -5,8 +5,8 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MyProfileScreen from 'screens/MyProfileScreen';
 import HomeScreen from 'screens/HomeScreen';
+import MatchListScreen from 'screens/MatchListScreen';
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
@@ -44,9 +44,6 @@ export default TabNavigator(
   {
     Home: {
       screen: HomeScreen,
-    },
-    MyProfile: {
-      screen: MyProfileScreen,
     },
   },
   {
