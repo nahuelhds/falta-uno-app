@@ -5,10 +5,11 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import HomeNavigator from 'navigation/HomeNavigator';
+import InvitePlayerNavigator from 'navigation/InvitePlayerNavigator';
 import MyMatchesNavigator from 'navigation/MyMatchesNavigator';
 
 const navigationResolver = ({ navigation }) => ({
+  header: null,
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
 })
 
@@ -39,19 +40,18 @@ const iconResolver = (navigation, focused) => {
 export default TabNavigator(
   {
     Home: {
-      screen: HomeNavigator,
+      screen: InvitePlayerNavigator,
     },
     MyMatches: {
       screen: MyMatchesNavigator,
     },
   },
   {
-    initialRouteName: 'Home',
+    animationEnabled: false,
     navigationOptions: navigationResolver,
+    swipeEnabled: false,
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
   }
 );
 

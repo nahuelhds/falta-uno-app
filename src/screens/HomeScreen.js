@@ -19,7 +19,7 @@ export default class HomeScreen extends React.Component {
         color={Colors.tintColor}
         onPress={() => navigation.navigate('MyProfile')}
       />
-    )
+    ),
   })
 
   constructor(props) {

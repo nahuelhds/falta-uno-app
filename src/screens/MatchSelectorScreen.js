@@ -12,6 +12,7 @@ export default class MatchListScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('matchSelector.title'),
+    tabBarVisible: false,
   })
 
   render() {
