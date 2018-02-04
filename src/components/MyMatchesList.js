@@ -15,12 +15,14 @@ export default class MyMatchesList extends React.Component {
     matches: {}
   }
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     // Get user matches
     const uid = Firebase.auth().currentUser.uid
     const db = Firebase.database()
     const matchesRef = db.ref('matches')
-    db.ref(`users/${uid}/matches`).orderByChild('date').on('child_added', (userMatch) => {
+    this.userMatchesRef = db.ref(`users/${uid}/matches`);
+    this.userMatchesRef.orderByChild('date').on('child_added', (userMatch) => {
       matchesRef.child(userMatch.key).once('value', (matchSnap) => {
         let match = {
           [matchSnap.key]: matchSnap.val()
@@ -29,6 +31,10 @@ export default class MyMatchesList extends React.Component {
         this.setState({ matches })
       })
     })
+  }
+
+  componentWillUnmount() {
+    this.userMatchesRef.off('child_added');
   }
 
   render() {

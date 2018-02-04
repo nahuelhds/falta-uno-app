@@ -81,6 +81,10 @@ export default class MyProfileScreen extends React.Component {
     })
   }
 
+  componentWillUnmount(){
+    this.userRef.off('value');
+  }
+
   render() {
     if (this.state.loading) {
       return <View style={styles.loadingContainer}>
