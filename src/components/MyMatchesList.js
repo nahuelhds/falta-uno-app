@@ -25,7 +25,7 @@ export default class MyMatchesList extends React.Component {
     this.userMatchesRef.orderByChild('date').on('child_added', (userMatch) => {
       matchesRef.child(userMatch.key).once('value', (matchSnap) => {
         let match = matchSnap.val()
-
+        match.key = matchSnap.key; // ID de firebase
         let matches = this.state.matches.slice()
         matches.push(match)
         // matches = matches.sort((matchA, matchB) => {
