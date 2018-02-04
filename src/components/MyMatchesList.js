@@ -12,7 +12,7 @@ import Colors from 'constants/Colors';
 export default class MyMatchesList extends React.Component {
 
   state = {
-    matches: {}
+    matches: []
   }
 
   constructor(props) {
@@ -24,10 +24,14 @@ export default class MyMatchesList extends React.Component {
     this.userMatchesRef = db.ref(`users/${uid}/matches`);
     this.userMatchesRef.orderByChild('date').on('child_added', (userMatch) => {
       matchesRef.child(userMatch.key).once('value', (matchSnap) => {
-        let match = {
-          [matchSnap.key]: matchSnap.val()
-        }
-        const matches = Object.assign({}, this.state.matches, match)
+        let match = matchSnap.val()
+
+        let matches = this.state.matches.slice()
+        matches.push(match)
+        // matches = matches.sort((matchA, matchB) => {
+        //   return matchA.date > matchB.date
+        // })
+
         this.setState({ matches })
       })
     })
@@ -39,9 +43,8 @@ export default class MyMatchesList extends React.Component {
 
   render() {
     const matches = this.state.matches
-    const matchesKeys = Object.keys(matches)
 
-    if (!matchesKeys.length) {
+    if (!matches.length) {
       return (
         <View style={styles.emptyMacthesContainer}>
           <Text style={styles.emptyMatchesText}>{Lang.t(`matches.noMatchesAvailable`)}</Text>
@@ -51,8 +54,7 @@ export default class MyMatchesList extends React.Component {
     return (
       <ScrollView>
         <List>
-          {matchesKeys.map((key) => {
-            const match = matches[key]
+          {matches.map((match, key) => {
             return (
               <ListItem
                 key={key}
