@@ -5,10 +5,11 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MyProfileScreen from 'screens/MyProfileScreen';
-import HomeScreen from 'screens/HomeScreen';
+import InvitePlayerNavigator from 'navigation/InvitePlayerNavigator';
+import MyMatchesNavigator from 'navigation/MyMatchesNavigator';
 
 const navigationResolver = ({ navigation }) => ({
+  header: null,
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
 })
 
@@ -16,19 +17,15 @@ const iconResolver = (navigation, focused) => {
   const { routeName } = navigation.state;
   let iconName;
   switch (routeName) {
-    case 'MyProfile':
-      iconName =
-        Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
-      break;
     case 'Home':
       iconName =
         Platform.OS === 'ios'
           ? `ios-home${focused ? '' : '-outline'}`
           : 'md-home';
       break;
-    // case 'MyMatches':
-    //   iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
-    //   break;
+    case 'MyMatches':
+      iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
+      break;
   }
   return (
     <Ionicons
@@ -43,19 +40,18 @@ const iconResolver = (navigation, focused) => {
 export default TabNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: InvitePlayerNavigator,
     },
-    MyProfile: {
-      screen: MyProfileScreen,
+    MyMatches: {
+      screen: MyMatchesNavigator,
     },
   },
   {
-    initialRouteName: 'Home',
+    animationEnabled: false,
     navigationOptions: navigationResolver,
+    swipeEnabled: false,
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
   }
 );
 
