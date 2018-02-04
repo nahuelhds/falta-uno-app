@@ -1,7 +1,7 @@
 import { StackNavigator } from 'react-navigation';
 
-import NearPlayersScreen from 'screens/HomeScreen';
-import MatchSelectorScreen from 'screens/MatchSelectorScreen';
+import NearPlayersScreen from 'screens/NearPlayersScreen';
+import SelectMatchScreen from 'screens/SelectMatchScreen';
 import InviteScreen from 'screens/InviteScreen';
 
 export default StackNavigator(
@@ -9,13 +9,11 @@ export default StackNavigator(
     NearPlayers: {
       screen: NearPlayersScreen
     },
-    MatchSelector: {
-      screen: MatchSelectorScreen,
+    SelectMatch: {
+      screen: SelectMatchScreen,
     },
     Invite: {
       screen: InviteScreen,
     },
-  },
-  {
   }
 );

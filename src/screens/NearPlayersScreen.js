@@ -126,7 +126,7 @@ export default class HomeScreen extends React.Component {
                           title={player.displayName}
                           avatar={{ uri: player.photoURL }}
                           subtitle={Lang.t(`playerCard.fromDistance`, { distance: dist })}
-                          onPress={() => this.props.navigation.navigate('MatchSelector', { player })}
+                          onPress={() => this.props.navigation.navigate('SelectMatch', { player })}
                         />
                       )
                     }

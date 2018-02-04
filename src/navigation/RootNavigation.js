@@ -7,7 +7,7 @@ import registerForPushNotificationsAsync from 'api/registerForPushNotificationsA
 
 import MainTabNavigator from 'navigation/MainTabNavigator';
 import MyProfileScreen from 'screens/MyProfileScreen';
-import AddMatchScreen from 'screens/MatchAddScreen';
+import AddMatchScreen from 'screens/AddMatchScreen';
 
 const RootStackNavigator = StackNavigator(
   {
