@@ -34,6 +34,7 @@ export default class MatchListScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 45,
   },
   addMatchButtonContainer: {
     bottom: 0,
